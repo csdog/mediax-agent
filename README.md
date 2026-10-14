@@ -16,7 +16,7 @@ Agent features that create or change **schedules** wait until the desktop ships 
 ## Planned shape
 
 - **CLI:** primary command `mediax`, alias `mx`
-- **Skill:** install/sync into Cursor / Claude (and similar) from this repo
+- **Skill:** maintained in-repo at `skills/mediax/`; sync with `mediax skill sync`
 - **MCP:** thin wrapper over the same CLI / library — not a second protocol
 - **Talk to desktop:** loopback HTTP on `127.0.0.1` + a local token file (not a cloud relay)
 
@@ -37,11 +37,21 @@ Electron cannot use Bun as its main-process runtime; Bun is for this agent CLI o
 bun install
 bun run doctor          # human summary (exit 1 until desktop control API exists)
 bun run mediax doctor --json
+bun run mediax skill show
+bun run mediax skill sync   # → ~/.agents/skills/mediax
 bun test
 bun run build           # dist/mediax + dist/mx via Bun compile
 ```
 
 `doctor` checks `~/.mediax/control.json` (or `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN`) and probes `GET {baseUrl}/health` with the bearer token. Desktop has not shipped that API yet, so “not ready” is expected.
+
+### Skill
+
+Source of truth: [`skills/mediax/`](skills/mediax/). Keep `SKILL.md` version in sync with meaningful CLI changes. After pull/upgrade:
+
+```bash
+mediax skill sync
+```
 
 ## Non-goals (for now)
 

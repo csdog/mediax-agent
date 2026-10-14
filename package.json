@@ -17,13 +17,13 @@
     "doctor": "bun run src/cli.ts doctor",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "build": "bun build ./src/cli.ts --compile --outfile dist/mediax && cp dist/mediax dist/mx"
+    "build": "bun build ./src/cli.ts --compile --outfile dist/mediax && cp dist/mediax dist/mx && rm -rf dist/skills && cp -R skills dist/skills"
   },
   "dependencies": {
     "citty": "^0.2.2"
   },
   "devDependencies": {
     "@types/bun": "^1.4.3",
-    "typescript": "^5.9.3"
+    "typescript": "7.0.2"
   }
 }

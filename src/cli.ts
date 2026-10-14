@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 import { defineCommand, runMain } from "citty";
 import { formatDoctorHuman, runDoctor } from "./commands/doctor";
+import { skillCommand } from "./commands/skill";
 import { printJson, printLines } from "./lib/print";
 import { cliVersion } from "./version";
 
@@ -32,6 +33,7 @@ const main = defineCommand({
   },
   subCommands: {
     doctor,
+    skill: skillCommand,
   },
 });
 
