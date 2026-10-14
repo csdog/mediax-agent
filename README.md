@@ -20,6 +20,17 @@ Agent features that create or change **schedules** wait until the desktop ships 
 - **MCP:** thin wrapper over the same CLI / library — not a second protocol
 - **Talk to desktop:** loopback HTTP on `127.0.0.1` + a local token file (not a cloud relay)
 
+## Tech stack (decided)
+
+| Layer | Choice |
+| --- | --- |
+| **Desktop control API** ([`csdog/mediax`](https://github.com/csdog/mediax)) | Electron main process: **Hono** + OpenAPI/Swagger (e.g. `@hono/zod-openapi`), bind `127.0.0.1` only |
+| **This CLI** | **TypeScript** + **Bun compile** → single binary (`mediax` / `mx`); users need not install Node |
+| **API client** | Generate from desktop OpenAPI with **`@openapi-codegen/typescript`** |
+| **Contract flow** | Desktop owns/exports OpenAPI → this repo generates typed client → CLI/MCP call loopback |
+
+Electron cannot use Bun as its main-process runtime; Bun is for this agent CLI only.
+
 ## Non-goals (for now)
 
 - No working publish / schedule / draft APIs in this repository yet
