@@ -6,24 +6,18 @@ MediaX 的 Agent 面仓库（GitHub：`csdog/mediax-agent`）。本目录即仓�
 
 ## 命令
 
-用 **Bun**（不要默认改成 npm/pnpm/vite）。TypeScript 与桌面对齐为 **7.0.2**。
+完整本地开发 / 生成客户端 / 构建见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。用 **Bun**（不要默认改成 npm/pnpm/vite）。TypeScript 与桌面对齐为 **7.0.2**。
 
 ```sh
 bun install
-bun run mediax --help
 bun run doctor
 bun run mediax doctor --json
-bun run mediax skill show
-bun run mediax skill sync
 bun run generate:api
 bun test
-bun run typecheck
 bun run build
 ```
 
-`bun run build` 产出 `dist/mediax`、`dist/mx`（Bun compile），并复制 `skills/` 到 `dist/skills/` 供编译产物旁路同步。
-
-不要实现或假装已实现桌面尚未提供的控制 API；`doctor` 在无 `control.json` / 连不上 `/health` 时 exit `1` 是预期。
+`doctor` 在无 `control.json` / 连不上 `/health` 时 exit `1` 是预期（桌面未开或未进 Eventually）。不要实现或假装已实现桌面尚未提供的业务 API。
 
 ## 代码位置
 
@@ -60,11 +54,11 @@ bun run build
 
 ### 走 PR，再打 tag
 
-GitHub Release 自动 **What's Changed** 只汇总合并进默认分支的 **PR**。
+完整构建与发版步骤见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。GitHub Release 自动 **What's Changed** 只汇总合并进默认分支的 **PR**。
 
 1. 功能分支开发（含 version bump）。
 2. PR → merge 进 `main`。
-3. 在已合并的 `main` 上打并推送与 `package.json` 一致的 `v*` 标签（如需发二进制/Release）。
+3. 在已合并的 `main` 上打并推送与 `package.json` 一致的 `v*` 标签，创建 [Release](https://github.com/csdog/mediax-agent/releases)。
 
 用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推。
 
