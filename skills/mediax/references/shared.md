@@ -11,7 +11,7 @@
 | 来源 | 说明 |
 | --- | --- |
 | `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN` | 环境变量，须成对出现 |
-| `~/.mediax/control.json` | 桌面启用控制面后写入（未来） |
+| `~/.mediax/control.json` | 桌面 Eventually 阶段写入（约启动后 3s）；退出时删除 |
 | `MEDIAX_HOME` | 覆盖配置目录（默认 `~/.mediax`） |
 | `MEDIAX_CONTROL_CONFIG` | 覆盖 control.json 路径 |
 

@@ -1,0 +1,48 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "MediaX Desktop Control API",
+    "version": "0.0.1",
+    "description": "Fixture until MediaX desktop ships Hono OpenAPI. Prefer regenerating from a live desktop URL when available."
+  },
+  "servers": [{ "url": "http://127.0.0.1" }],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "healthGet",
+        "summary": "Control API health",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthResponse" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "token"
+      }
+    },
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "required": ["ok"],
+        "properties": {
+          "ok": { "type": "boolean" },
+          "version": { "type": "string", "nullable": true }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import type { ControlConfig } from "./config";
+import { healthGet } from "./api/desktopComponents";
 
 export type DesktopProbe = {
   ok: boolean;
@@ -9,46 +10,67 @@ export type DesktopProbe = {
   bodyPreview: string | null;
 };
 
-/** Probe desktop control health. Desktop API may not exist yet — treat connection errors as offline. */
+/** Probe desktop control health via generated OpenAPI client. Offline / missing API → not ok. */
 export async function probeDesktop(config: ControlConfig, timeoutMs = 1500): Promise<DesktopProbe> {
   const url = `${config.baseUrl}/health`;
   const started = performance.now();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${config.token}`,
-        Accept: "application/json",
-      },
-      signal: controller.signal,
-    });
-    const text = await response.text();
+    const body = await healthGet(
+      { baseUrl: config.baseUrl, token: config.token },
+      controller.signal,
+    );
     return {
-      ok: response.ok,
+      ok: body.ok === true,
       url,
-      status: response.status,
+      status: 200,
       latencyMs: Math.round(performance.now() - started),
-      error: response.ok ? null : `HTTP ${response.status}`,
-      bodyPreview: text.slice(0, 200) || null,
+      error: body.ok === true ? null : "health.ok is not true",
+      bodyPreview: JSON.stringify(body).slice(0, 200),
     };
   } catch (error) {
-    const message =
-      error instanceof Error
-        ? error.name === "AbortError"
-          ? `timeout after ${timeoutMs}ms`
-          : error.message
-        : String(error);
+    const message = formatProbeError(error, timeoutMs);
+    const status =
+      typeof error === "object" &&
+      error !== null &&
+      "status" in error &&
+      typeof (error as { status: unknown }).status === "number"
+        ? (error as { status: number }).status
+        : null;
+    const payload =
+      typeof error === "object" && error !== null && "payload" in error
+        ? (error as { payload: unknown }).payload
+        : null;
     return {
       ok: false,
       url,
-      status: null,
+      status,
       latencyMs: Math.round(performance.now() - started),
       error: message,
-      bodyPreview: null,
+      bodyPreview:
+        payload === null || payload === undefined
+          ? null
+          : typeof payload === "string"
+            ? payload.slice(0, 200)
+            : JSON.stringify(payload).slice(0, 200),
     };
   } finally {
     clearTimeout(timer);
   }
+}
+
+function formatProbeError(error: unknown, timeoutMs: number): string {
+  if (error instanceof Error) {
+    return error.name === "AbortError" ? `timeout after ${timeoutMs}ms` : error.message;
+  }
+  if (typeof error === "object" && error !== null && "status" in error) {
+    const status = (error as { status: unknown }).status;
+    if (status === "unknown") {
+      const payload = (error as { payload?: unknown }).payload;
+      return typeof payload === "string" ? payload : "unknown error";
+    }
+    if (typeof status === "number") return `HTTP ${status}`;
+  }
+  return String(error);
 }

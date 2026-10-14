@@ -1,6 +1,6 @@
 {
   "name": "mediax-agent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "type": "module",
   "description": "MediaX Agent CLI (Skill / MCP later): talk to local MediaX desktop",
@@ -15,6 +15,7 @@
   "scripts": {
     "mediax": "bun run src/cli.ts",
     "doctor": "bun run src/cli.ts doctor",
+    "generate:api": "node --require ./scripts/preload-ts48.cjs ./node_modules/@openapi-codegen/cli/lib/cli.js gen desktop && node ./scripts/fix-generated-imports.mjs",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "build": "bun build ./src/cli.ts --compile --outfile dist/mediax && cp dist/mediax dist/mx && rm -rf dist/skills && cp -R skills dist/skills"
@@ -23,6 +24,8 @@
     "citty": "^0.2.2"
   },
   "devDependencies": {
+    "@openapi-codegen/cli": "^3.1.0",
+    "@openapi-codegen/typescript": "^11.1.0",
     "@types/bun": "^1.4.3",
     "typescript": "7.0.2"
   }

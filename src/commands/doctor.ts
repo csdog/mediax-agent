@@ -45,7 +45,7 @@ export async function runDoctor(): Promise<DoctorReport> {
   if (resolved.parseError) blockers.push(resolved.parseError);
   if (!resolved.config) {
     blockers.push(
-      "No control config: start MediaX desktop (when Agent API ships) or set MEDIAX_CONTROL_URL + MEDIAX_CONTROL_TOKEN",
+      "No control config: start MediaX desktop (wait ~3s after launch for control.json) or set MEDIAX_CONTROL_URL + MEDIAX_CONTROL_TOKEN",
     );
   }
 
@@ -63,10 +63,10 @@ export async function runDoctor(): Promise<DoctorReport> {
 
   const canCall = Boolean(resolved.config && probe?.ok);
   const note = !resolved.config
-    ? "Desktop has not written ~/.mediax/control.json yet (control API not implemented or not enabled)."
+    ? "No ~/.mediax/control.json — start this repo's MediaX desktop build and wait for the Eventually phase (~3s), or set MEDIAX_CONTROL_URL + MEDIAX_CONTROL_TOKEN."
     : probe?.ok
       ? "Desktop control API responded OK."
-      : "Config present but /health failed — is MediaX running with Agent control enabled?";
+      : "Config present but /health failed — is MediaX still running?";
 
   return {
     ok: canCall && blockers.length === 0,

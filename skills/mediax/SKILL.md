@@ -1,7 +1,7 @@
 ---
 name: mediax
-version: 0.0.1
-description: "通过 mediax / mx CLI 操作本机 MediaX 桌面：环境自检（doctor）。排期/发布等命令待桌面控制面与排期能力就绪后再扩展。"
+version: 0.0.2
+description: "通过 mediax / mx CLI 操作本机 MediaX 桌面：环境自检（doctor）。桌面控制面已提供 /health；排期/发布等命令待排期能力就绪后再扩展。"
 metadata:
   category: "productivity"
   requires:
