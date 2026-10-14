@@ -2,7 +2,7 @@
 
 Agent-facing tooling for [MediaX](https://github.com/csdog/mediax): CLI + Skill for Cursor / Claude (and similar), with an optional MCP layer later.
 
-**Status:** skeleton only. Product commands are not implemented yet.
+**Status:** early CLI scaffold. `doctor` works; publish/schedule commands are not implemented yet.
 
 ## Relationship to MediaX desktop
 
@@ -30,6 +30,18 @@ Agent features that create or change **schedules** wait until the desktop ships 
 | **Contract flow** | Desktop owns/exports OpenAPI → this repo generates typed client → CLI/MCP call loopback |
 
 Electron cannot use Bun as its main-process runtime; Bun is for this agent CLI only.
+
+## Development
+
+```bash
+bun install
+bun run doctor          # human summary (exit 1 until desktop control API exists)
+bun run mediax doctor --json
+bun test
+bun run build           # dist/mediax + dist/mx via Bun compile
+```
+
+`doctor` checks `~/.mediax/control.json` (or `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN`) and probes `GET {baseUrl}/health` with the bearer token. Desktop has not shipped that API yet, so “not ready” is expected.
 
 ## Non-goals (for now)
 

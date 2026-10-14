@@ -1,0 +1,29 @@
+{
+  "name": "mediax-agent",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "MediaX Agent CLI (Skill / MCP later): talk to local MediaX desktop",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/csdog/mediax-agent.git"
+  },
+  "bin": {
+    "mediax": "./bin/mediax",
+    "mx": "./bin/mx"
+  },
+  "scripts": {
+    "mediax": "bun run src/cli.ts",
+    "doctor": "bun run src/cli.ts doctor",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "build": "bun build ./src/cli.ts --compile --outfile dist/mediax && cp dist/mediax dist/mx"
+  },
+  "dependencies": {
+    "citty": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.3",
+    "typescript": "^5.9.3"
+  }
+}
