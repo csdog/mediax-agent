@@ -2,7 +2,7 @@
 name: mediax-bootstrap
 description: "用于安装或升级 MediaX CLI、同步正式 Skill，并完成基础配置与环境自检。"
 metadata:
-  version: "0.0.7"
+  version: "0.0.8"
   category: productivity
 ---
 
@@ -51,7 +51,7 @@ curl -f --connect-timeout 10 --max-time 120 \
 bash install-mediax.sh --skills-dir '<skills-dir>'
 ```
 
-客户端默认安装到 `$HOME/.local/bin`，并创建 `mx` → `mediax` 软链接。自定义目录用 `--bin-dir`。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.0.7`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
+客户端默认安装到 `$HOME/.local/bin`，并创建 `mx` → `mediax` 软链接。自定义目录用 `--bin-dir`。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.0.8`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
 
 **Windows（PowerShell）**
 
@@ -62,9 +62,9 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 & .\install-mediax.ps1 -SkillsDir '<skills-dir>' -AddToPath
 ```
 
-客户端默认安装到 `%LOCALAPPDATA%\mediax-agent\bin`，并写入 `mx.cmd`。自定义目录用 `-BinDir`。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.0.7`。`-AddToPath` 将安装目录加入当前用户 PATH（无需管理员）；已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
+客户端默认安装到 `%LOCALAPPDATA%\mediax-agent\bin`，并写入 `mx.cmd`。自定义目录用 `-BinDir`。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.0.8`。`-AddToPath` 将安装目录加入当前用户 PATH（无需管理员）；已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
 
-Windows ARM64 优先下载 `mediax-windows-arm64.zip`；若 Release 尚无该资产，则回退到 `mediax-windows-x64.zip`（仿真运行）。
+Windows ARM64 目前使用 `mediax-windows-x64.zip`（在 ARM 上仿真运行；Bun 尚未提供 windows-arm64 交叉编译目标）。
 
 ## 第 2 步 验证 CLI
 
