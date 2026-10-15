@@ -2,7 +2,7 @@
 name: mediax-bootstrap
 description: "用于安装或升级 MediaX CLI、同步正式 Skill，并完成基础配置与环境自检。"
 metadata:
-  version: "0.0.5"
+  version: "0.0.6"
   category: productivity
 ---
 
@@ -19,13 +19,14 @@ metadata:
 ## 核心原则
 
 - Agent 优先：通过 CLI（`mediax` / `mx`）使用 MediaX Agent 能力。
-- 当前从 GitHub 源码用 Bun 编译安装；有 Release 二进制后可改为下载包。
+- **使用 GitHub Release 已编译客户端**，不引导普通用户安装 Bun / 从源码构建。
 - 安装与桌面登录分开：需另启 [MediaX 桌面](https://github.com/csdog/mediax) 写出 `~/.mediax/control.json`。
 
 ## 环境要求
 
-- macOS / Linux：Bash、curl、tar；安装 CLI 需 [Bun](https://bun.sh)。
-- 无需管理员权限。
+- macOS / Linux：Bash、curl、tar、unzip。
+- **无需 Bun、Node、管理员权限。**
+- Windows：可从 [Releases](https://github.com/csdog/mediax-agent/releases) 下载 `mediax-windows-x64.zip`；shell 安装脚本以 macOS / Linux 为主。
 
 ## 安装目录
 
@@ -39,7 +40,7 @@ metadata:
 
 ## 第 1 步 安装 CLI 与 Skill
 
-在临时目录下载并执行安装脚本：
+在临时目录下载并执行安装脚本（自动识别平台并拉取最新 Release 二进制）：
 
 ```bash
 curl -f --connect-timeout 10 --max-time 120 \
@@ -48,7 +49,9 @@ curl -f --connect-timeout 10 --max-time 120 \
 bash install-mediax.sh --skills-dir '<skills-dir>'
 ```
 
-仅同步 Skill（不编译 CLI）时追加 `--skill-only`。自定义 CLI 目录用 `--bin-dir`。
+仅同步 Skill（不装 CLI）时追加 `--skill-only`。自定义 CLI 目录用 `--bin-dir`。指定版本用 `--ref v0.0.6`。
+
+开发者若需从源码编译，追加 `--from-source`（此时才需要 [Bun](https://bun.sh)）。
 
 客户端默认安装到 `$HOME/.local/bin`，并创建 `mx` → `mediax` 软链接。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
 
@@ -67,7 +70,7 @@ mediax doctor
 
 ## 更新
 
-已安装的 CLI 在交互终端运行子命令时，若检测到 GitHub Release 有更新版本，会在 stderr 提示，并给出与上方相同的一句话安装指令。设置 `MEDIAX_NO_UPDATE_CHECK=1` 可关闭检查。
+已安装的 CLI 在交互终端运行子命令时，若检测到 GitHub Release 有更新版本，会在 stderr 提示，并给出与上方相同的一句话安装指令。设置 `MEDIAX_NO_UPDATE_CHECK=1` 可关闭检查。升级时重新执行第 1 步即可。
 
 ## 完成后
 
