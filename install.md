@@ -2,7 +2,7 @@
 name: mediax-bootstrap
 description: "用于安装或升级 MediaX CLI、同步正式 Skill，并完成基础配置与环境自检。"
 metadata:
-  version: "0.0.10"
+  version: "0.0.11"
   category: productivity
 ---
 
@@ -71,7 +71,7 @@ curl -f --connect-timeout 10 --max-time 120 \
 bash install-mediax.sh --skills-dir '<skills-dir>'
 ```
 
-CLI 真文件装入 `$HOME/.mediax/agent/bin/mediax-cli`；默认在 `$HOME/.local/bin` 创建 `mediax-cli` / `mxc` 软链（`--bin-dir` 可改链接目录）。Skill 装入 `$HOME/.mediax/agent/skills/{mediax,mx}`，并软链到 `--skills-dir/{mediax,mx}` 与 `~/.agents/skills/{mediax,mx}`（Skill 短名仍为 `mx`）。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.0.10`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
+CLI 真文件装入 `$HOME/.mediax/agent/bin/mediax-cli`；默认在 `$HOME/.local/bin` 创建 `mediax-cli` / `mxc` 软链（`--bin-dir` 可改链接目录）。Skill 装入 `$HOME/.mediax/agent/skills/{mediax,mx}`，并软链到 `--skills-dir/{mediax,mx}` 与 `~/.agents/skills/{mediax,mx}`（Skill 短名仍为 `mx`）。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.0.11`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
 
 **Windows（PowerShell）**
 
