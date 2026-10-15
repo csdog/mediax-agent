@@ -2,7 +2,7 @@
 name: mediax-bootstrap
 description: "用于安装或升级 MediaX CLI、同步正式 Skill，并完成基础配置与环境自检。"
 metadata:
-  version: "0.0.6"
+  version: "0.0.7"
   category: productivity
 ---
 
@@ -25,8 +25,8 @@ metadata:
 ## 环境要求
 
 - macOS / Linux：Bash、curl、tar、unzip。
+- Windows：PowerShell 5.1 或以上。
 - **无需 Bun、Node、管理员权限。**
-- Windows：可从 [Releases](https://github.com/csdog/mediax-agent/releases) 下载 `mediax-windows-x64.zip`；shell 安装脚本以 macOS / Linux 为主。
 
 ## 安装目录
 
@@ -40,7 +40,9 @@ metadata:
 
 ## 第 1 步 安装 CLI 与 Skill
 
-在临时目录下载并执行安装脚本（自动识别平台并拉取最新 Release 二进制）：
+选择当前系统对应的方式，在临时工作目录下载并执行安装脚本。脚本自动识别平台并拉取最新 Release 二进制。
+
+**macOS / Linux（Shell）**
 
 ```bash
 curl -f --connect-timeout 10 --max-time 120 \
@@ -49,11 +51,20 @@ curl -f --connect-timeout 10 --max-time 120 \
 bash install-mediax.sh --skills-dir '<skills-dir>'
 ```
 
-仅同步 Skill（不装 CLI）时追加 `--skill-only`。自定义 CLI 目录用 `--bin-dir`。指定版本用 `--ref v0.0.6`。
+客户端默认安装到 `$HOME/.local/bin`，并创建 `mx` → `mediax` 软链接。自定义目录用 `--bin-dir`。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.0.7`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
 
-开发者若需从源码编译，追加 `--from-source`（此时才需要 [Bun](https://bun.sh)）。
+**Windows（PowerShell）**
 
-客户端默认安装到 `$HOME/.local/bin`，并创建 `mx` → `mediax` 软链接。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
+```powershell
+$ErrorActionPreference = 'Stop'
+Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/install.ps1' `
+  -OutFile install-mediax.ps1 -UseBasicParsing -TimeoutSec 120 -MaximumRedirection 0
+& .\install-mediax.ps1 -SkillsDir '<skills-dir>' -AddToPath
+```
+
+客户端默认安装到 `%LOCALAPPDATA%\mediax-agent\bin`，并写入 `mx.cmd`。自定义目录用 `-BinDir`。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.0.7`。`-AddToPath` 将安装目录加入当前用户 PATH（无需管理员）；已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
+
+Windows ARM64 优先下载 `mediax-windows-arm64.zip`；若 Release 尚无该资产，则回退到 `mediax-windows-x64.zip`（仿真运行）。
 
 ## 第 2 步 验证 CLI
 
@@ -62,7 +73,14 @@ mediax --version
 mediax doctor
 ```
 
-`doctor` 在桌面未启动或控制面未就绪时失败是预期；先启动 MediaX 桌面并等待 Eventually 写出 `~/.mediax/control.json`。
+Windows 若尚未刷新 PATH，可使用安装目录下的绝对路径，例如：
+
+```powershell
+& "$env:LOCALAPPDATA\mediax-agent\bin\mediax.exe" --version
+& "$env:LOCALAPPDATA\mediax-agent\bin\mediax.exe" doctor
+```
+
+`doctor` 在桌面未启动或控制面未就绪时失败是预期；先启动 MediaX 桌面并等待 Eventually 写出 `%USERPROFILE%\.mediax\control.json`（或 macOS / Linux 的 `~/.mediax/control.json`）。
 
 ## 第 3 步 确认 Skill
 

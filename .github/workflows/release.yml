@@ -36,6 +36,7 @@ jobs:
           build_one bun-linux-x64 mediax-linux-x64
           build_one bun-linux-arm64 mediax-linux-arm64
           build_one bun-windows-x64 mediax-windows-x64.exe
+          build_one bun-windows-arm64 mediax-windows-arm64.exe
           (
             cd dist/release
             for f in mediax-darwin-arm64 mediax-darwin-x64 mediax-linux-x64 mediax-linux-arm64; do
@@ -44,9 +45,12 @@ jobs:
               zip -9 "${f}.zip" mediax
               rm mediax
             done
-            cp mediax-windows-x64.exe mediax.exe
-            zip -9 mediax-windows-x64.zip mediax.exe
-            rm mediax.exe
+            for f in mediax-windows-x64.exe mediax-windows-arm64.exe; do
+              base=${f%.exe}
+              cp "$f" mediax.exe
+              zip -9 "${base}.zip" mediax.exe
+              rm mediax.exe
+            done
           )
           rm -rf dist/skills-stage
           mkdir -p dist/skills-stage/mediax
@@ -66,5 +70,6 @@ jobs:
             dist/release/mediax-linux-x64.zip
             dist/release/mediax-linux-arm64.zip
             dist/release/mediax-windows-x64.zip
+            dist/release/mediax-windows-arm64.zip
             dist/release/mediax-skills.zip
           fail_on_unmatched_files: true
