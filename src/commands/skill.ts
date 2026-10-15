@@ -1,6 +1,6 @@
 import { defineCommand } from "citty";
 import { printJson, printLines } from "../lib/print";
-import { defaultSkillSyncDir, readSkillInfo, syncSkill } from "../lib/skill";
+import { readSkillInfo, syncSkill } from "../lib/skill";
 import { cliVersion } from "../version";
 
 export const skillCommand = defineCommand({
@@ -28,6 +28,7 @@ export const skillCommand = defineCommand({
             `Skill   ${info.name} v${info.version}`,
             `Source  ${info.sourceDir}`,
             `Sync to ${info.defaultSyncDir}`,
+            info.aliasSourceDir ? `Alias   mx → ${info.aliasSyncDir}` : "",
             info.description ? `About   ${info.description}` : "",
           ].filter(Boolean));
       },
@@ -35,18 +36,19 @@ export const skillCommand = defineCommand({
     sync: defineCommand({
       meta: {
         name: "sync",
-        description: "Copy skills/mediax into a local Agent skills directory",
+        description:
+          "Refresh ~/.mediax/agent/skills/{mediax,mx} and symlink Agent skill dirs",
       },
       args: {
         dir: {
           type: "string",
-          description: `Target directory (default: ${defaultSkillSyncDir()})`,
+          description:
+            "Extra Agent skill path to symlink (also links sibling mx/mediax; default ~/.agents/skills/*)",
         },
         json: { type: "boolean", description: "JSON output", default: false },
       },
       run({ args }) {
-        const target = args.dir?.trim() || defaultSkillSyncDir();
-        const result = syncSkill(target);
+        const result = syncSkill(args.dir?.trim() || undefined);
         const info = readSkillInfo();
         const payload = {
           ok: true,
@@ -55,7 +57,21 @@ export const skillCommand = defineCommand({
           data: { ...result, name: info.name, skillVersion: info.version },
         };
         if (args.json) printJson(payload);
-        else printLines([`Synced ${info.name} v${info.version}`, `  from ${result.sourceDir}`, `  to   ${result.targetDir}`]);
+        else {
+          const lines = [
+            `Synced ${info.name} v${info.version}`,
+            `  from ${result.sourceDir}`,
+            `  to   ${result.targetDir}`,
+            `  link ${result.agentLinkDir}`,
+          ];
+          if (result.aliasTargetDir) {
+            lines.push(`  alias ${result.aliasTargetDir}`);
+            if (result.agentAliasLinkDir) lines.push(`  link ${result.agentAliasLinkDir}`);
+          }
+          if (result.extraLinkDir) lines.push(`  link ${result.extraLinkDir}`);
+          if (result.extraAliasLinkDir) lines.push(`  link ${result.extraAliasLinkDir}`);
+          printLines(lines);
+        }
       },
     }),
   },

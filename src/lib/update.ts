@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
-import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { cliVersion } from "../version";
+import { defaultAgentHome } from "./config";
 
 export const CHECK_INTERVAL_SECONDS = 24 * 60 * 60;
 export const DEFAULT_RELEASES_URL =
@@ -36,19 +36,11 @@ export function newerVersion(latest: string, current: string): boolean {
   return false;
 }
 
-export function updateCachePath(cacheDirectory = "mediax-agent"): string | null {
-  const home = homedir();
-  if (!home) return null;
-  if (process.platform === "win32") {
-    const root = process.env.LOCALAPPDATA;
-    if (!root) return null;
-    return join(root, cacheDirectory, "update.json");
-  }
-  if (process.platform === "darwin") {
-    return join(home, "Library", "Application Support", cacheDirectory, "update.json");
-  }
-  const root = process.env.XDG_CACHE_HOME || join(home, ".cache");
-  return join(root, cacheDirectory, "update.json");
+/** Update-check cache lives under MEDIAX_HOME/agent (next to CLI/Skill). */
+export function updateCachePath(): string | null {
+  const dir = defaultAgentHome();
+  if (!dir) return null;
+  return join(dir, "update.json");
 }
 
 export function formatUpdateMessage(current: string, latest: string): string {

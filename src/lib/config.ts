@@ -18,12 +18,18 @@ export type ResolvedControl = {
   parseError: string | null;
 };
 
+/** Product root (`MEDIAX_HOME` or `~/.mediax`). */
 export function defaultConfigDir(): string {
   return process.env.MEDIAX_HOME?.trim() || join(homedir(), ".mediax");
 }
 
+/** Agent tree (`~/.mediax/agent`): CLI, Skills, control.json, update cache. */
+export function defaultAgentHome(): string {
+  return join(defaultConfigDir(), "agent");
+}
+
 export function defaultControlConfigPath(): string {
-  return process.env.MEDIAX_CONTROL_CONFIG?.trim() || join(defaultConfigDir(), "control.json");
+  return process.env.MEDIAX_CONTROL_CONFIG?.trim() || join(defaultAgentHome(), "control.json");
 }
 
 function fromEnv(): ControlConfig | null {
@@ -70,7 +76,7 @@ function readFileConfig(path: string): { config: ControlConfig | null; parseErro
 
 export function resolveControlConfig(): ResolvedControl {
   const configPath = defaultControlConfigPath();
-  const configDir = defaultConfigDir();
+  const configDir = defaultAgentHome();
   try {
     const envConfig = fromEnv();
     if (envConfig) {

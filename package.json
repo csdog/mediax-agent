@@ -1,6 +1,6 @@
 {
   "name": "mediax-agent",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "private": false,
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -10,16 +10,17 @@
     "url": "https://github.com/csdog/mediax-agent.git"
   },
   "bin": {
-    "mediax": "./bin/mediax",
-    "mx": "./bin/mx"
+    "mediax-cli": "./bin/mediax-cli",
+    "mxc": "./bin/mxc"
   },
   "scripts": {
-    "mediax": "bun run src/cli.ts",
+    "mediax-cli": "bun run src/cli.ts",
+    "mxc": "bun run src/cli.ts",
     "doctor": "bun run src/cli.ts doctor",
     "generate:api": "node --require ./scripts/preload-ts48.cjs ./node_modules/@openapi-codegen/cli/lib/cli.js gen desktop && node ./scripts/fix-generated-imports.mjs",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "build": "bun build ./src/cli.ts --compile --outfile dist/mediax && cp dist/mediax dist/mx && rm -rf dist/skills && cp -R skills dist/skills"
+    "build": "bun build ./src/cli.ts --compile --outfile dist/mediax-cli && cp dist/mediax-cli dist/mxc && rm -rf dist/skills && cp -R skills dist/skills"
   },
   "dependencies": {
     "citty": "^0.2.2"

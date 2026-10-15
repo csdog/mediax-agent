@@ -2,7 +2,11 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { resolveControlConfig } from "./config";
+import {
+  defaultAgentHome,
+  defaultControlConfigPath,
+  resolveControlConfig,
+} from "./config";
 
 const envKeys = [
   "MEDIAX_HOME",
@@ -26,6 +30,18 @@ function restoreEnv() {
 
 afterEach(() => {
   restoreEnv();
+});
+
+describe("control paths", () => {
+  test("default control.json is under MEDIAX_HOME/agent", () => {
+    stashEnv();
+    const dir = mkdtempSync(join(tmpdir(), "mediax-home-"));
+    process.env.MEDIAX_HOME = dir;
+    delete process.env.MEDIAX_CONTROL_CONFIG;
+    expect(defaultAgentHome()).toBe(join(dir, "agent"));
+    expect(defaultControlConfigPath()).toBe(join(dir, "agent", "control.json"));
+    rmSync(dir, { recursive: true, force: true });
+  });
 });
 
 describe("resolveControlConfig", () => {
