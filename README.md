@@ -41,6 +41,7 @@ bash install-mediax.sh --skills-dir '<skills-dir>'
 | --- | --- |
 | 🩺 **doctor** | 检查 `control.json` / 环境变量，探测桌面 `GET /health` |
 | 📎 **Skill** | 仓内维护 `skills/mediax/`，`mediax skill sync` 同步到本机 |
+| 🔔 **更新提示** | 交互终端 stderr 提醒新版本（GitHub Releases；`MEDIAX_NO_UPDATE_CHECK` 可关） |
 | 📦 **单文件分发** | Bun compile → `mediax` / `mx`，终端用户不必装 Node |
 | 🔌 **OpenAPI 客户端** | `@openapi-codegen/typescript` 生成类型化调用 |
 
@@ -77,6 +78,7 @@ bun run mediax doctor
 | --- | --- | --- |
 | doctor | 配置与桌面 `/health` 可达性 | ✅ |
 | skill show / sync | 展示与同步仓内 Skill | ✅ |
+| 更新提示 | 有 GitHub Release 且版本更新时，stderr 提示并给出一句话安装 | ✅ |
 | OpenAPI 生成客户端 | `bun run generate:api` | ✅ |
 | Bun compile 二进制 | `bun run build` → `dist/mediax`、`dist/mx` | ✅ |
 | GitHub Release（`v*`） | 打标签发版；What's Changed 依赖 PR 合并 | 🚧 |

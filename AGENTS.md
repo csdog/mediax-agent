@@ -64,8 +64,9 @@ bun run build
 
 ## 约束
 
-- 输出：人类可读默认；机器用 `--json`（字段含 `ok` / `action` / `version` / `data`）。
+- 输出：人类可读默认；机器用 `--json`（字段含 `ok` / `action` / `version` / `data`）。更新提醒只写 **stderr**，不要污染 stdout JSON。
 - 日志与 JSON **不要**打印完整 token。
+- 更新检查：`src/lib/update.ts`；默认源为 GitHub Releases；可用 `MEDIAX_NO_UPDATE_CHECK` / `MEDIAX_UPDATE_URL`。
 - 不把本仓改成与 `csdog/mediax` 的 monorepo。
 - 不在本仓实现桌面主进程 HTTP；契约变更以桌面 OpenAPI 为准，本仓只跑 `generate:api` 消费生成客户端。
 - 改 `DesktopFetcherExtraProps` 后必须重跑 `generate:api`（并保留 `scripts/fix-generated-imports.mjs` 对 `verbatimModuleSyntax` 的修补）。

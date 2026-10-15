@@ -2,7 +2,7 @@
 name: mediax-bootstrap
 description: "用于安装或升级 MediaX CLI、同步正式 Skill，并完成基础配置与环境自检。"
 metadata:
-  version: "0.0.4"
+  version: "0.0.5"
   category: productivity
 ---
 
@@ -64,6 +64,10 @@ mediax doctor
 ## 第 3 步 确认 Skill
 
 确认 `<skills-dir>/mediax/SKILL.md` 存在，刷新 Agent 技能列表或重启 Agent。
+
+## 更新
+
+已安装的 CLI 在交互终端运行子命令时，若检测到 GitHub Release 有更新版本，会在 stderr 提示，并给出与上方相同的一句话安装指令。设置 `MEDIAX_NO_UPDATE_CHECK=1` 可关闭检查。
 
 ## 完成后
 

@@ -21,6 +21,10 @@ bun run build               # dist/mediax + dist/mx（Bun compile）+ dist/skill
 
 `doctor` 读取 `~/.mediax/control.json`（或 `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN`），经生成客户端探测 `GET {baseUrl}/health`。需本机已启动带控制面的 MediaX 桌面（Eventually 后约 3s 写出 control.json）。
 
+### CLI 更新提示
+
+交互终端（stderr 为 TTY）下，正常子命令会读本地 `update.json` 缓存；若缓存的最新版本高于当前 `package.json` version，则在 **stderr** 打印提醒（含安装说明链接与一句话安装）。后台最多每 24h 请求一次 GitHub `releases/latest`。设置 `MEDIAX_NO_UPDATE_CHECK=1` 可关闭。`--help` / `--version` 不检查。
+
 ## 构建与发版
 
 ```sh
