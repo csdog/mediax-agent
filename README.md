@@ -16,13 +16,22 @@ loopback 连接 · 本地 token · 不经第三方云端
 请根据 https://raw.githubusercontent.com/csdog/mediax-agent/main/install.md，安装 mediax
 ```
 
-macOS / Linux 安装脚本会从 GitHub Release 拉取**已编译** `mediax`（**不需要 Bun**；把 `<skills-dir>` 换成 Agent 的 skills 父目录）：
+安装脚本会从 GitHub Release 拉取**已编译** `mediax`（**不需要 Bun**；把 `<skills-dir>` 换成 Agent 的 skills 父目录）：
+
+macOS / Linux：
 
 ```bash
 curl -f --connect-timeout 10 --max-time 120 \
   'https://raw.githubusercontent.com/csdog/mediax-agent/main/install.sh' \
   -o install-mediax.sh &&
 bash install-mediax.sh --skills-dir '<skills-dir>'
+```
+
+Windows（PowerShell）：
+
+```powershell
+Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/install.ps1' -OutFile install-mediax.ps1 -UseBasicParsing
+& .\install-mediax.ps1 -SkillsDir '<skills-dir>' -AddToPath
 ```
 
 ---
