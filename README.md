@@ -1,12 +1,14 @@
+![MediaX](build/icon.png)
+
 # MediaX Agent
 
 **MediaX 的 Agent 面**  
 CLI + Skill，让 Cursor / Claude 等通过本机命令操作桌面  
 loopback 连接 · 本地 token · 不经第三方云端
 
-![release](https://img.shields.io/github/v/release/csdog/mediax-agent?style=flat-square&label=release)![Bun](https://img.shields.io/badge/Bun-compile-fbf0df?style=flat-square&logo=bun&logoColor=black)![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?style=flat-square&logo=typescript&logoColor=white)![CLI](https://img.shields.io/badge/CLI-mediax%20%7C%20mx-111827?style=flat-square)
+![release](https://img.shields.io/github/v/release/csdog/mediax-agent?style=flat-square&label=release)![Bun](https://img.shields.io/badge/Bun-compile-fbf0df?style=flat-square&logo=bun&logoColor=black)![TypeScript](https://img.shields.io/badge/TypeScript-7-3178c6?style=flat-square&logo=typescript&logoColor=white)![CLI](https://img.shields.io/badge/CLI-mediax--cli%20%7C%20mxc-111827?style=flat-square)
 
-[为什么用](#为什么用-mediax-agent) · [特性](#特性) · [与桌面的关系](#与桌面的关系) · [快速开始](#快速开始) · [主要能力](#主要能力) · [开发](docs/DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md) · [Releases](https://github.com/csdog/mediax-agent/releases)
+[为什么用](#为什么用-mediax-agent) · [特性](#特性) · [与桌面的关系](#与桌面的关系) · [快速开始](#快速开始) · [主要能力](#主要能力) · [资助](#资助) · [开发](docs/DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md) · [Releases](https://github.com/csdog/mediax-agent/releases)
 
 ## 安装
 
@@ -16,7 +18,7 @@ loopback 连接 · 本地 token · 不经第三方云端
 请根据 https://raw.githubusercontent.com/csdog/mediax-agent/main/install.md，安装 mediax
 ```
 
-安装脚本会从 GitHub Release 拉取**已编译** `mediax`（**不需要 Bun**；把 `<skills-dir>` 换成 Agent 的 skills 父目录）：
+安装脚本会从 GitHub Release 拉取**已编译** `mediax-cli`（**不需要 Bun**；把 `<skills-dir>` 换成 Agent 的 skills 父目录）：
 
 macOS / Linux：
 
@@ -40,7 +42,7 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 
 桌面仓 [`csdog/mediax`](https://github.com/csdog/mediax) 负责账号、创作与发布；本仓是给 Agent 用的**机器入口**，不另起一套云发布通道。
 
-- **同一套命令** — 主命令 `mediax`，别名 `mx`；Skill / 日后 MCP 都走同一路径
+- **同一套命令** — CLI `mediax-cli`（短命令 `mxc`）；Skill 名 `mediax` / `mx`；日后 MCP 走同一路径
 - **本机可控** — 只连桌面 loopback HTTP + 本地 token，不经第三方云中转
 - **契约生成** — 客户端由桌面 OpenAPI 生成，避免手写第二套类型
 
@@ -49,7 +51,7 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 | | |
 | --- | --- |
 | 🩺 **doctor** | 检查 `control.json` / 环境变量，探测桌面 `GET /health` |
-| 📎 **Skill** | 仓内维护 `skills/mediax/`，`mediax skill sync` 同步到本机 |
+| 📎 **Skill** | 仓内维护 `skills/mediax/`；安装与 `skill sync` 写入 `~/.mediax/skills/mediax`，Agent 目录软链 |
 | 🔔 **更新提示** | 交互终端 stderr 提醒新版本（GitHub Releases；`MEDIAX_NO_UPDATE_CHECK` 可关） |
 | 📦 **单文件分发** | GitHub Release 预编译包；安装脚本无需 Bun / Node |
 | 🔌 **OpenAPI 客户端** | `@openapi-codegen/typescript` 生成类型化调用 |
@@ -70,13 +72,13 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 ### 配合桌面自检
 
 1. 启动带控制面的 [MediaX 桌面](https://github.com/csdog/mediax)（开发：`pnpm run dev`），等待 Eventually 写出 `~/.mediax/control.json`（约 3 秒）
-2. 执行 `mediax doctor`（或 `mediax doctor --json`）
+2. 执行 `mediax-cli doctor`（或 `mxc doctor --json`）
 
 本仓源码开发：
 
 ```sh
 bun install
-bun run mediax doctor
+bun run mediax-cli doctor
 ```
 
 本地改代码、生成 API、构建与发版步骤见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。
@@ -89,7 +91,7 @@ bun run mediax doctor
 | skill show / sync | 展示与同步仓内 Skill | ✅ |
 | 更新提示 | 有 GitHub Release 且版本更新时，stderr 提示并给出一句话安装 | ✅ |
 | OpenAPI 生成客户端 | `bun run generate:api` | ✅ |
-| Bun compile 二进制 | `bun run build` → `dist/mediax`、`dist/mx` | ✅ |
+| Bun compile 二进制 | `bun run build` → `dist/mediax-cli`、`dist/mxc` | ✅ |
 | GitHub Release（`v*`） | 打标签发版；What's Changed 依赖 PR 合并 | ✅ |
 | CI 多平台二进制 | Actions 交叉编译并挂到 Release（`release.yml`） | ✅ |
 | 发布 / 草稿 API | 经控制面创建内容、触发发布 | ⏳ |
@@ -101,6 +103,14 @@ bun run mediax doctor
 - 不与 `csdog/mediax` 合并为 monorepo
 - 控制通道不依赖第三方云发布商
 - 不在本仓实现桌面主进程 HTTP
+
+## 资助
+
+本项目由下列组织资助开发。
+
+| | 资助方 | 简介 | 链接 |
+| :---: | --- | --- | --- |
+| <img src="https://www.angryecho.com/apple-touch-icon.png" width="40" height="40" alt="吐槽网"> | **吐槽网（AngryEcho）** | 以兴趣为核心的实时社区：帖子即讨论室，点赞与互动实时同步；从兴趣热点到圈内新鲜事，随时加入讨论，在多元观点中看见事件全貌。 | <a href="https://www.angryecho.com"><img src="https://img.shields.io/badge/官网-angryecho.com-111827?style=flat-square&logo=googlechrome&logoColor=white" alt="官网"></a> <a href="https://www.angryecho.com/c/angryecho"><img src="https://img.shields.io/badge/社区-angryecho-ea580c?style=flat-square&logo=reddit&logoColor=white" alt="社区"></a> |
 
 ## Star History
 

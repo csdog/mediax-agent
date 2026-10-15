@@ -11,14 +11,18 @@ import {
   parseGithubLatestTag,
   refreshUpdateCache,
   UPDATE_PROMPT,
+  updateCachePath,
 } from "./update";
 
 const dirs: string[] = [];
+const savedMediaxHome = process.env.MEDIAX_HOME;
 
 afterEach(() => {
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
   delete process.env.MEDIAX_NO_UPDATE_CHECK;
   delete process.env.MEDIAX_UPDATE_URL;
+  if (savedMediaxHome === undefined) delete process.env.MEDIAX_HOME;
+  else process.env.MEDIAX_HOME = savedMediaxHome;
 });
 
 function tempDir() {
@@ -54,6 +58,17 @@ describe("formatUpdateMessage", () => {
     const text = formatUpdateMessage("0.0.4", "0.0.5");
     expect(text).toContain("0.0.4 → 0.0.5");
     expect(text).toContain(UPDATE_PROMPT);
+  });
+});
+
+describe("updateCachePath", () => {
+  test("resolves under MEDIAX_HOME", () => {
+    const dir = tempDir();
+    process.env.MEDIAX_HOME = dir;
+    const path = updateCachePath();
+    expect(path).toBe(join(dir, "update.json"));
+    expect(path).not.toContain("Application Support");
+    expect(path).not.toContain(`${join("", ".cache")}`);
   });
 });
 

@@ -40,20 +40,21 @@ jobs:
             cd dist/release
             for f in mediax-darwin-arm64 mediax-darwin-x64 mediax-linux-x64 mediax-linux-arm64; do
               chmod +x "$f"
-              cp "$f" mediax
-              zip -9 "${f}.zip" mediax
-              rm mediax
+              cp "$f" mediax-cli
+              zip -9 "${f}.zip" mediax-cli
+              rm mediax-cli
             done
-            cp mediax-windows-x64.exe mediax.exe
-            zip -9 mediax-windows-x64.zip mediax.exe
-            rm mediax.exe
+            cp mediax-windows-x64.exe mediax-cli.exe
+            zip -9 mediax-windows-x64.zip mediax-cli.exe
+            rm mediax-cli.exe
           )
           rm -rf dist/skills-stage
-          mkdir -p dist/skills-stage/mediax
+          mkdir -p dist/skills-stage/mediax dist/skills-stage/mx
           cp -R skills/mediax/. dist/skills-stage/mediax/
+          cp -R skills/mx/. dist/skills-stage/mx/
           (
             cd dist/skills-stage
-            zip -9r ../release/mediax-skills.zip mediax
+            zip -9r ../release/mediax-skills.zip mediax mx
           )
 
       - name: Attach release assets

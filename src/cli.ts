@@ -30,7 +30,7 @@ const doctor = defineCommand({
 
 const main = defineCommand({
   meta: {
-    name: "mediax",
+    name: "mediax-cli",
     version: cliVersion(),
     description: "MediaX Agent CLI — local desktop control (publish/schedule later)",
   },
