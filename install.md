@@ -82,9 +82,9 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 & .\install-mediax.ps1 -SkillsDir '<skills-dir>' -AddToPath
 ```
 
-CLI 装入 `%USERPROFILE%\.mediax\agent\bin`（`mediax-cli.exe` + `mxc.cmd`）。`-AddToPath` 将该目录加入当前用户 PATH。Skill 真源在 `%USERPROFILE%\.mediax\agent\skills\{mediax,mx}`，并对 `-SkillsDir` 与 `%USERPROFILE%\.agents\skills` 建目录链接。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.0.10`。已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
+CLI 装入 `%USERPROFILE%\.mediax\agent\bin`（`mediax-cli.exe` + `mxc.cmd`）。`-AddToPath` 将该目录加入当前用户 PATH。Skill 真源在 `%USERPROFILE%\.mediax\agent\skills\{mediax,mx}`，并对 `-SkillsDir` 与 `%USERPROFILE%\.agents\skills` 建目录链接。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.0.11`。已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
 
-Windows ARM64 目前使用 `mediax-windows-x64.zip`（在 ARM 上仿真运行；若后续 Release 提供 arm64 资产再改脚本）。
+Windows x64 使用 `mediax-windows-x64.zip`；Windows ARM64 优先 `mediax-windows-arm64.zip`（若某次 Release 缺该资产则回退 x64 仿真）。
 
 ## 第 2 步 验证 CLI
 
