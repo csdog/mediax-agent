@@ -1,6 +1,6 @@
 ---
 name: mediax
-version: 0.0.9
+version: 0.0.10
 description: "通过 mediax-cli / mxc CLI 操作本机 MediaX 桌面：环境自检（doctor）。桌面控制面已提供 /health；排期/发布等命令待排期能力就绪后再扩展。"
 metadata:
   category: "productivity"
@@ -29,7 +29,7 @@ metadata:
 
 - 需要机器可读结果时加 `--json`。
 - 控制面只允许 loopback（`127.0.0.1` / `localhost`）+ 本地 token；不要引导用户把 API 暴露到局域网。
-- 配置来源优先级：`MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN` > `~/.mediax/control.json`（或 `MEDIAX_CONTROL_CONFIG` / `MEDIAX_HOME`）。
+- 配置来源优先级：`MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN` > `~/.mediax/agent/control.json`（或 `MEDIAX_CONTROL_CONFIG` / `MEDIAX_HOME`）。
 - 未实现的子命令不要编造；引导用户查看 `mediax-cli --help` 或等待桌面排期/控制面落地。
 
 ## 命令探索

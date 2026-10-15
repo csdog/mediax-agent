@@ -62,11 +62,11 @@ describe("formatUpdateMessage", () => {
 });
 
 describe("updateCachePath", () => {
-  test("resolves under MEDIAX_HOME", () => {
+  test("resolves under MEDIAX_HOME/agent", () => {
     const dir = tempDir();
     process.env.MEDIAX_HOME = dir;
     const path = updateCachePath();
-    expect(path).toBe(join(dir, "update.json"));
+    expect(path).toBe(join(dir, "agent", "update.json"));
     expect(path).not.toContain("Application Support");
     expect(path).not.toContain(`${join("", ".cache")}`);
   });

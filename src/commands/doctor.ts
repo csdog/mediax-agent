@@ -63,7 +63,7 @@ export async function runDoctor(): Promise<DoctorReport> {
 
   const canCall = Boolean(resolved.config && probe?.ok);
   const note = !resolved.config
-    ? "No ~/.mediax/control.json — start this repo's MediaX desktop build and wait for the Eventually phase (~3s), or set MEDIAX_CONTROL_URL + MEDIAX_CONTROL_TOKEN."
+    ? "No ~/.mediax/agent/control.json — start this repo's MediaX desktop build and wait for the Eventually phase (~3s), or set MEDIAX_CONTROL_URL + MEDIAX_CONTROL_TOKEN."
     : probe?.ok
       ? "Desktop control API responded OK."
       : "Config present but /health failed — is MediaX still running?";

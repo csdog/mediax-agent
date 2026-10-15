@@ -11,7 +11,7 @@ import {
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defaultConfigDir } from "./config";
+import { defaultAgentHome } from "./config";
 
 export type SkillInfo = {
   name: string;
@@ -53,13 +53,13 @@ export function aliasSkillSourceDir(): string | null {
   return null;
 }
 
-/** Installed Skill tree under MEDIAX_HOME. */
+/** Installed Skill tree under MEDIAX_HOME/agent. */
 export function canonicalSkillDir(): string {
-  return join(defaultConfigDir(), "skills", "mediax");
+  return join(defaultAgentHome(), "skills", "mediax");
 }
 
 export function canonicalAliasSkillDir(): string {
-  return join(defaultConfigDir(), "skills", "mx");
+  return join(defaultAgentHome(), "skills", "mx");
 }
 
 /** Default sync target = canonical home Skill (not an Agent discovery path). */
@@ -182,7 +182,7 @@ export type SyncSkillResult = {
 };
 
 /**
- * Refresh `$MEDIAX_HOME/skills/{mediax,mx}` from packaged sources, then
+ * Refresh `$MEDIAX_HOME/agent/skills/{mediax,mx}` from packaged sources, then
  * ensure Agent discovery symlinks (and optional `--dir` links).
  */
 export function syncSkill(linkDir?: string): SyncSkillResult {

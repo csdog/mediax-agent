@@ -51,7 +51,7 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 | | |
 | --- | --- |
 | 🩺 **doctor** | 检查 `control.json` / 环境变量，探测桌面 `GET /health` |
-| 📎 **Skill** | 仓内维护 `skills/mediax/`；安装与 `skill sync` 写入 `~/.mediax/skills/mediax`，Agent 目录软链 |
+| 📎 **Skill** | 仓内维护 `skills/mediax/`；安装与 `skill sync` 写入 `~/.mediax/agent/skills/mediax`，Agent 目录软链 |
 | 🔔 **更新提示** | 交互终端 stderr 提醒新版本（GitHub Releases；`MEDIAX_NO_UPDATE_CHECK` 可关） |
 | 📦 **单文件分发** | GitHub Release 预编译包；安装脚本无需 Bun / Node |
 | 🔌 **OpenAPI 客户端** | `@openapi-codegen/typescript` 生成类型化调用 |
@@ -60,7 +60,7 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 
 | 侧 | 仓库 | 职责 |
 | --- | --- | --- |
-| 桌面 | [`csdog/mediax`](https://github.com/csdog/mediax) | Electron；Hono 控制面写 `~/.mediax/control.json`；业务真源 |
+| 桌面 | [`csdog/mediax`](https://github.com/csdog/mediax) | Electron；Hono 控制面写 `~/.mediax/agent/control.json`；业务真源 |
 | Agent（本仓） | `csdog/mediax-agent` | CLI / Skill /（后）MCP；只做客户端 |
 
 创建或改动**排期**的命令，需等桌面落地**多平台排期**与**内容日历**后再做。当前以 `doctor` / `skill` 等业务无关能力为主。
@@ -71,7 +71,7 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ins
 
 ### 配合桌面自检
 
-1. 启动带控制面的 [MediaX 桌面](https://github.com/csdog/mediax)（开发：`pnpm run dev`），等待 Eventually 写出 `~/.mediax/control.json`（约 3 秒）
+1. 启动带控制面的 [MediaX 桌面](https://github.com/csdog/mediax)（开发：`pnpm run dev`），等待 Eventually 写出 `~/.mediax/agent/control.json`（约 3 秒）
 2. 执行 `mediax-cli doctor`（或 `mxc doctor --json`）
 
 本仓源码开发：
@@ -110,7 +110,7 @@ bun run mediax-cli doctor
 
 | | 资助方 | 简介 | 链接 |
 | :---: | --- | --- | --- |
-| <img src="https://www.angryecho.com/apple-touch-icon.png" width="40" height="40" alt="吐槽网"> | **吐槽网（AngryEcho）** | 以兴趣为核心的实时社区：帖子即讨论室，点赞与互动实时同步；从兴趣热点到圈内新鲜事，随时加入讨论，在多元观点中看见事件全貌。 | <a href="https://www.angryecho.com"><img src="https://img.shields.io/badge/官网-angryecho.com-111827?style=flat-square&logo=googlechrome&logoColor=white" alt="官网"></a> <a href="https://www.angryecho.com/c/angryecho"><img src="https://img.shields.io/badge/社区-angryecho-ea580c?style=flat-square&logo=reddit&logoColor=white" alt="社区"></a> |
+| <img src="build/angryecho-icon.png" width="40" height="40" alt="吐槽网"> | **吐槽网（AngryEcho）** | 以兴趣为核心的实时社区：帖子即讨论室，点赞与互动实时同步；从兴趣热点到圈内新鲜事，随时加入讨论，在多元观点中看见事件全貌。 | <a href="https://www.angryecho.com"><img src="https://img.shields.io/badge/官网-angryecho.com-111827?style=flat-square&logo=googlechrome&logoColor=white" alt="官网"></a> <a href="https://www.angryecho.com/c/angryecho"><img src="https://img.shields.io/badge/社区-angryecho-ea580c?style=flat-square&logo=reddit&logoColor=white" alt="社区"></a> |
 
 ## Star History
 

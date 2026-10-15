@@ -38,11 +38,11 @@ describe("skill", () => {
     expect(info.sourceDir).toContain("skills/mediax");
   });
 
-  test("default sync dir is MEDIAX_HOME/skills/mediax", () => {
+  test("default sync dir is MEDIAX_HOME/agent/skills/mediax", () => {
     const home = tempDir();
     process.env.MEDIAX_HOME = home;
-    expect(defaultSkillSyncDir()).toBe(join(home, "skills", "mediax"));
-    expect(canonicalSkillDir()).toBe(join(home, "skills", "mediax"));
+    expect(defaultSkillSyncDir()).toBe(join(home, "agent", "skills", "mediax"));
+    expect(canonicalSkillDir()).toBe(join(home, "agent", "skills", "mediax"));
   });
 
   test("syncs to canonical home and links agent + extra dirs", () => {
@@ -52,9 +52,9 @@ describe("skill", () => {
     const extra = join(root, ".cursor", "skills", "mediax");
 
     const result = syncSkill(extra);
-    expect(result.targetDir).toBe(join(root, ".mediax", "skills", "mediax"));
+    expect(result.targetDir).toBe(join(root, ".mediax", "agent", "skills", "mediax"));
     expect(existsSync(join(result.targetDir, "SKILL.md"))).toBe(true);
-    expect(result.aliasTargetDir).toBe(join(root, ".mediax", "skills", "mx"));
+    expect(result.aliasTargetDir).toBe(join(root, ".mediax", "agent", "skills", "mx"));
     expect(existsSync(join(result.aliasTargetDir!, "SKILL.md"))).toBe(true);
 
     const agentLink = defaultAgentSkillLinkDir();

@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # MediaX CLI + Skill installer. Downloads GitHub Release binaries — Bun not required.
-# Layout: $MEDIAX_HOME/{bin,skills/mediax,backups/<version>,…}; PATH/Agent dirs are symlinks.
+# Layout: $MEDIAX_ROOT/agent/{bin,skills,backups,control.json,…}.
+# PATH/Agent dirs are symlinks into agent/.
 set -eu
 
 REPO_SLUG='csdog/mediax-agent'
 REF='latest'
 DOWNLOAD_BASE="https://github.com/${REPO_SLUG}/releases"
 RAW_BASE="https://raw.githubusercontent.com/${REPO_SLUG}/main"
-MEDIAX_HOME="${MEDIAX_HOME:-$HOME/.mediax}"
+MEDIAX_ROOT="${MEDIAX_HOME:-$HOME/.mediax}"
+MEDIAX_HOME="$MEDIAX_ROOT/agent"
 LINK_DIR="${MEDIAX_BIN_DIR:-$HOME/.local/bin}"
 SKILLS_DIR=''
 SKILL_ONLY=false
@@ -27,10 +29,10 @@ usage() {
 Usage: install.sh --skills-dir DIR [--bin-dir DIR] [--skill-only] [--from-source] [--ref TAG]
 
   --skills-dir DIR   Agent skills parent directory (symlinks DIR/mediax + DIR/mx)
-  --bin-dir DIR      PATH link directory for mediax-cli / mxc (default: ~/.local/bin); real binary in ~/.mediax/bin
+  --bin-dir DIR      PATH link directory for mediax-cli / mxc (default: ~/.local/bin); real binary in ~/.mediax/agent/bin
   --skill-only       Sync Skill only; do not install the CLI
   --from-source      Build CLI with Bun from source (developers / fallback)
-  --ref TAG          Release tag (default: latest). Example: v0.0.9
+  --ref TAG          Release tag (default: latest). Example: v0.0.10
 EOF
 }
 
@@ -124,7 +126,7 @@ backup_existing() {
     has_skill=true
   fi
   if [ "$has_bin" = false ] && [ "$has_skill" = false ]; then
-    return
+    return 0
   fi
   ver=$(outgoing_version)
   backup="$MEDIAX_HOME/backups/$ver"
@@ -148,7 +150,7 @@ backup_existing() {
 
 prune_backups() {
   local backups_root="$MEDIAX_HOME/backups"
-  [ -d "$backups_root" ] || return
+  [ -d "$backups_root" ] || return 0
   # Keep newest BACKUP_KEEP dirs by mtime; delete the rest.
   # shellcheck disable=SC2012
   ls -1t "$backups_root" 2>/dev/null | tail -n +"$((BACKUP_KEEP + 1))" | while IFS= read -r name; do
@@ -266,7 +268,7 @@ main() {
 
   TEMP_DIR=$(mktemp -d)
   trap 'rm -rf -- "$TEMP_DIR"' EXIT
-  mkdir -p "$MEDIAX_HOME"
+  mkdir -p "$MEDIAX_ROOT" "$MEDIAX_HOME"
 
   backup_existing
 
@@ -315,7 +317,8 @@ main() {
   fi
 
   printf '\nDone. Refresh the Agent skill list (or restart the Agent), then run: mediax-cli doctor\n'
-  printf 'Home: %s\n' "$MEDIAX_HOME"
+  printf 'Root: %s\n' "$MEDIAX_ROOT"
+  printf 'Agent home: %s (control.json under this tree)\n' "$MEDIAX_HOME"
   printf 'Install doc: %s/install.md\n' "$RAW_BASE"
 }
 

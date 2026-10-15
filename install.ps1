@@ -1,10 +1,10 @@
 # MediaX CLI + Skill installer. Downloads GitHub Release binaries — Bun not required.
-# Layout: $env:USERPROFILE\.mediax\{bin,skills\mediax,backups\<version>,…}
+# Layout: %USERPROFILE%\.mediax\agent\{bin,skills,backups,control.json}.
 # Windows PowerShell 5.1 or PowerShell 7+.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)][string]$SkillsDir,
-    [string]$MediaxHome = $(if ($env:MEDIAX_HOME) { $env:MEDIAX_HOME } else { Join-Path $env:USERPROFILE '.mediax' }),
+    [string]$MediaxRoot = $(if ($env:MEDIAX_HOME) { $env:MEDIAX_HOME } else { Join-Path $env:USERPROFILE '.mediax' }),
     [string]$BinDir = '',
     [string]$Ref = 'latest',
     [switch]$SkillOnly,
@@ -16,6 +16,7 @@ $RepoSlug = 'csdog/mediax-agent'
 $DownloadBase = "https://github.com/$RepoSlug/releases"
 $RawBase = "https://raw.githubusercontent.com/$RepoSlug/main"
 $BackupKeep = 3
+$MediaxHome = Join-Path $MediaxRoot 'agent'
 $HomeBin = Join-Path $MediaxHome 'bin'
 $HomeSkills = Join-Path $MediaxHome 'skills\mediax'
 $HomeAliasSkills = Join-Path $MediaxHome 'skills\mx'
@@ -209,6 +210,7 @@ switch ($architecture.ToUpperInvariant()) {
 $TemporaryDir = Join-Path ([IO.Path]::GetTempPath()) ('mediax-' + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $TemporaryDir | Out-Null
 try {
+    New-Item -ItemType Directory -Force -Path $MediaxRoot | Out-Null
     New-Item -ItemType Directory -Force -Path $MediaxHome | Out-Null
     Backup-ExistingInstall
 
@@ -296,7 +298,8 @@ try {
 
     Write-Output ''
     Write-Output 'Done. Refresh the Agent skill list (or restart the Agent), then run: mediax-cli doctor'
-    Write-Output "Home: $MediaxHome"
+    Write-Output "Root: $MediaxRoot"
+    Write-Output "Agent home: $MediaxHome (control.json under this tree)"
     Write-Output "Install doc: $RawBase/install.md"
 }
 finally {

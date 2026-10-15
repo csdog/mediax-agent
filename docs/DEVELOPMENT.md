@@ -12,20 +12,20 @@ bun run mediax-cli --help
 bun run doctor
 bun run mediax-cli doctor --json
 bun run mediax-cli skill show
-bun run mediax-cli skill sync   # → ~/.mediax/skills/{mediax,mx} + Agent 软链
+bun run mediax-cli skill sync   # → ~/.mediax/agent/skills/{mediax,mx} + Agent 软链
 bun run generate:api
 bun test
 bun run typecheck
 bun run build               # dist/mediax-cli + dist/mxc（Bun compile）+ dist/skills/
 ```
 
-`doctor` 读取 `~/.mediax/control.json`（或 `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN`），经生成客户端探测 `GET {baseUrl}/health`。需本机已启动带控制面的 MediaX 桌面（Eventually 后约 3s 写出 control.json）。
+`doctor` 读取 `~/.mediax/agent/control.json`（或 `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN`），经生成客户端探测 `GET {baseUrl}/health`。需本机已启动带控制面的 MediaX 桌面（Eventually 后约 3s 写出 control.json）。
 
 ### CLI 更新提示
 
-交互终端（stderr 为 TTY）下，正常子命令会读 `$MEDIAX_HOME/update.json`（默认 `~/.mediax/update.json`）；若缓存的最新版本高于当前 `package.json` version，则在 **stderr** 打印提醒（含安装说明链接与一句话安装）。后台最多每 24h 请求一次 GitHub `releases/latest`。设置 `MEDIAX_NO_UPDATE_CHECK=1` 可关闭。`--help` / `--version` 不检查。
+交互终端（stderr 为 TTY）下，正常子命令会读 `$MEDIAX_HOME/agent/update.json`（默认 `~/.mediax/agent/update.json`）；若缓存的最新版本高于当前 `package.json` version，则在 **stderr** 打印提醒（含安装说明链接与一句话安装）。后台最多每 24h 请求一次 GitHub `releases/latest`。设置 `MEDIAX_NO_UPDATE_CHECK=1` 可关闭。`--help` / `--version` 不检查。
 
-安装脚本把 CLI/Skill 写入 `~/.mediax/{bin,skills}`，PATH 与 Agent 目录用软链；布局自检：`bash scripts/smoke-install-home.sh`。
+安装脚本把 CLI/Skill 写入 `~/.mediax/agent/{bin,skills}`，PATH 与 Agent 目录用软链；桌面 `control.json` 同在 `~/.mediax/agent/`；布局自检：`bash scripts/smoke-install-home.sh`。
 
 ## 构建与发版
 
@@ -46,7 +46,7 @@ git tag v0.0.2
 git push origin v0.0.2
 ```
 
-打 `v*` 标签后，[`.github/workflows/release.yml`](../.github/workflows/release.yml) 会交叉编译 macOS / Linux / Windows 二进制与 `mediax-skills.zip` 并挂到 GitHub Release。终端用户用 `install.sh` / `install.ps1` 下载到 `~/.mediax`，**不需要 Bun**；本机开发仍用 `bun run build`。
+打 `v*` 标签后，[`.github/workflows/release.yml`](../.github/workflows/release.yml) 会交叉编译 macOS / Linux / Windows 二进制与 `mediax-skills.zip` 并挂到 GitHub Release。终端用户用 `install.sh` / `install.ps1` 下载到 `~/.mediax/agent`，**不需要 Bun**；本机开发仍用 `bun run build`。
 
 用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推（并自行写清 release 正文或接受无 What's Changed）。
 

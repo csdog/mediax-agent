@@ -37,7 +37,7 @@ export const skillCommand = defineCommand({
       meta: {
         name: "sync",
         description:
-          "Refresh ~/.mediax/skills/{mediax,mx} and symlink Agent skill dirs",
+          "Refresh ~/.mediax/agent/skills/{mediax,mx} and symlink Agent skill dirs",
       },
       args: {
         dir: {

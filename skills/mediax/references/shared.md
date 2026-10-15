@@ -11,8 +11,8 @@
 | 来源 | 说明 |
 | --- | --- |
 | `MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN` | 环境变量，须成对出现 |
-| `~/.mediax/control.json` | 桌面 Eventually 阶段写入（约启动后 3s）；退出时删除 |
-| `MEDIAX_HOME` | 覆盖配置目录（默认 `~/.mediax`） |
+| `~/.mediax/agent/control.json` | 桌面 Eventually 阶段写入（约启动后 3s）；退出时删除 |
+| `MEDIAX_HOME` | 覆盖产品根目录（默认 `~/.mediax`；其下 `agent/` 为 Agent 树） |
 | `MEDIAX_CONTROL_CONFIG` | 覆盖 control.json 路径 |
 
 `control.json` 形状：
@@ -48,13 +48,14 @@ mediax-cli doctor --json
 
 | 路径 | 说明 |
 | --- | --- |
-| `~/.mediax/bin/mediax-cli` | 已安装 CLI 真文件 |
-| `~/.mediax/skills/mediax` | 已安装 Skill 真源 |
-| `~/.mediax/skills/mx` | 短名入口 Skill（Skill 名仍为 `mx`） |
-| `~/.mediax/backups/<version>/` | 升级备份（最多保留 3 份） |
-| `~/.mediax/update.json` | 更新检查缓存 |
-| `~/.local/bin/mediax-cli`、`mxc` | → `~/.mediax/bin/mediax-cli`（PATH 软链） |
-| `~/.agents/skills/mediax`、`mx` 等 | → 对应 `~/.mediax/skills/…`（Agent 发现软链） |
+| `~/.mediax/agent/control.json` | 桌面控制面配置 |
+| `~/.mediax/agent/bin/mediax-cli` | 已安装 CLI 真文件 |
+| `~/.mediax/agent/skills/mediax` | 已安装 Skill 真源 |
+| `~/.mediax/agent/skills/mx` | 短名入口 Skill（Skill 名仍为 `mx`） |
+| `~/.mediax/agent/backups/<version>/` | 升级备份（最多保留 3 份） |
+| `~/.mediax/agent/update.json` | 更新检查缓存 |
+| `~/.local/bin/mediax-cli`、`mxc` | → `~/.mediax/agent/bin/mediax-cli`（PATH 软链） |
+| `~/.agents/skills/mediax`、`mx` 等 | → 对应 `~/.mediax/agent/skills/…`（Agent 发现软链） |
 
 ## Skill 同步
 
