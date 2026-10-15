@@ -53,15 +53,17 @@ bun run build
 
 对用户可见的 CLI/Skill 行为有实质变化时，**同一批提交**抬 `package.json` 的 `version`（semver），并视需要同步 Skill frontmatter `version`。
 
+**只要 `package.json` 的 `version` 相对上一已发布版本有增加，合并进 `main` 后必须立刻打并推送同号 `v*` 标签**（如 `0.0.11` → `v0.0.11`）。禁止出现「版本号已抬、tag 未打」；不要等用户再提醒发版。
+
 ### 走 PR，再打 tag
 
 完整构建与发版步骤见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。GitHub Release 自动 **What's Changed** 只汇总合并进默认分支的 **PR**。
 
 1. 功能分支开发（含 version bump）。
 2. PR → merge 进 `main`。
-3. 在已合并的 `main` 上打并推送与 `package.json` 一致的 `v*` 标签，创建 [Release](https://github.com/csdog/mediax-agent/releases)。
+3. **同一轮操作内**在已合并的 `main` 上打并推送与 `package.json` 一致的 `v*` 标签，创建 [Release](https://github.com/csdog/mediax-agent/releases)。
 
-用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推。
+用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推。无论走 PR 还是直推，**version bump 后都必须打 tag**。
 
 ## 约束
 
