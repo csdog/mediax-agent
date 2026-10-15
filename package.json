@@ -1,7 +1,7 @@
 {
   "name": "mediax-agent",
-  "version": "0.0.3",
-  "private": true,
+  "version": "0.0.4",
+  "private": false,
   "license": "AGPL-3.0-only",
   "type": "module",
   "description": "MediaX Agent CLI (Skill / MCP later): talk to local MediaX desktop",

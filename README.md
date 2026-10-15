@@ -8,6 +8,23 @@ loopback 连接 · 本地 token · 不经第三方云端
 
 [为什么用](#为什么用-mediax-agent) · [特性](#特性) · [与桌面的关系](#与桌面的关系) · [快速开始](#快速开始) · [主要能力](#主要能力) · [开发](docs/DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md) · [Releases](https://github.com/csdog/mediax-agent/releases)
 
+## 安装
+
+发给支持 Skill 的 Agent（一句话）：
+
+```
+请根据 https://raw.githubusercontent.com/csdog/mediax-agent/main/install.md，安装 mediax
+```
+
+macOS / Linux 也可直接跑安装脚本（把 `<skills-dir>` 换成 Agent 的 skills 父目录）：
+
+```bash
+curl -f --connect-timeout 10 --max-time 120 \
+  'https://raw.githubusercontent.com/csdog/mediax-agent/main/install.sh' \
+  -o install-mediax.sh &&
+bash install-mediax.sh --skills-dir '<skills-dir>'
+```
+
 ---
 
 ## 为什么用 MediaX Agent
@@ -38,24 +55,18 @@ loopback 连接 · 本地 token · 不经第三方云端
 
 ## 快速开始
 
-### 下载使用
-
-1. 打开 [Releases](https://github.com/csdog/mediax-agent/releases)，按系统下载 `mediax`（或 `mx`）二进制（有发布时）
-2. 放到 `PATH` 后执行 `mediax doctor`
-3. （可选）`mediax skill sync` 同步 Skill
-
-发版：在已合并的 `main` 上打与 `package.json` 一致的 `v*` 标签（如 `v0.0.2`）并推送，用于 GitHub Release。当前优先本机 `bun run build`；CI 自动打多平台二进制仍待补齐。
+优先用上方[安装](#安装)一句话或 `install.sh`。说明全文见 [install.md](install.md)。
 
 ### 配合桌面自检
 
 1. 启动带控制面的 [MediaX 桌面](https://github.com/csdog/mediax)（开发：`pnpm run dev`），等待 Eventually 写出 `~/.mediax/control.json`（约 3 秒）
-2. 或本仓源码运行：
+2. 执行 `mediax doctor`（或 `mediax doctor --json`）
+
+本仓源码开发：
 
 ```sh
 bun install
 bun run mediax doctor
-# 或
-bun run mediax doctor --json
 ```
 
 本地改代码、生成 API、构建与发版步骤见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。

@@ -1,6 +1,6 @@
 # Contributing
 
-感谢关注 MediaX Agent。本仓目前为私有维护；若你有权限提交改动，请按下面约定。
+感谢关注 MediaX Agent。欢迎通过 PR 提交改动，请按下面约定。
 
 ## 本地开发
 
