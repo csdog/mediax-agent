@@ -2,13 +2,14 @@ import { describe, expect, test } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { cliVersion } from "../version";
 import { readSkillInfo, syncSkill } from "./skill";
 
 describe("skill", () => {
   test("reads in-repo skill frontmatter", () => {
     const info = readSkillInfo();
     expect(info.name).toBe("mediax");
-    expect(info.version).toBe("0.0.1");
+    expect(info.version).toBe(cliVersion());
     expect(info.sourceDir).toContain("skills/mediax");
   });
 

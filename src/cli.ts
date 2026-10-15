@@ -3,7 +3,10 @@ import { defineCommand, runMain } from "citty";
 import { formatDoctorHuman, runDoctor } from "./commands/doctor";
 import { skillCommand } from "./commands/skill";
 import { printJson, printLines } from "./lib/print";
+import { notifyUpdateAvailable } from "./lib/update";
 import { cliVersion } from "./version";
+
+notifyUpdateAvailable();
 
 const doctor = defineCommand({
   meta: {
