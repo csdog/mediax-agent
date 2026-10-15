@@ -1,6 +1,6 @@
 {
   "name": "mediax-agent",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "private": false,
   "license": "AGPL-3.0-only",
   "type": "module",

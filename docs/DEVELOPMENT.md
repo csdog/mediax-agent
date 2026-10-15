@@ -46,7 +46,7 @@ git tag v0.0.2
 git push origin v0.0.2
 ```
 
-打 `v*` 标签后，[`.github/workflows/release.yml`](../.github/workflows/release.yml) 会交叉编译 macOS / Linux / Windows 二进制与 `mediax-skills.zip` 并挂到 GitHub Release。终端用户用 `install.sh` / `install.ps1` 下载到 `~/.mediax/agent`，**不需要 Bun**；本机开发仍用 `bun run build`。
+打 `v*` 标签后，[`.github/workflows/release.yml`](../.github/workflows/release.yml)（`oven-sh/setup-bun` 使用 **Bun latest**）会交叉编译 macOS / Linux / Windows（含 `windows-arm64`）二进制与 `mediax-skills.zip` 并挂到 GitHub Release。终端用户用 `install.sh` / `install.ps1` 下载到 `~/.mediax/agent`，**不需要 Bun**；本机开发仍用 `bun run build`。
 
 用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推（并自行写清 release 正文或接受无 What's Changed）。
 

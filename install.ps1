@@ -201,9 +201,8 @@ if (-not $SkillsDir.Trim()) {
 
 $architecture = if ($env:PROCESSOR_ARCHITEW6432) { $env:PROCESSOR_ARCHITEW6432 } else { $env:PROCESSOR_ARCHITECTURE }
 switch ($architecture.ToUpperInvariant()) {
-    # Bun compile currently ships windows-x64 only; ARM64 Windows runs it under emulation.
     'AMD64' { $Asset = 'mediax-windows-x64.zip'; $BinName = 'mediax-cli.exe' }
-    'ARM64' { $Asset = 'mediax-windows-x64.zip'; $BinName = 'mediax-cli.exe' }
+    'ARM64' { $Asset = 'mediax-windows-arm64.zip'; $BinName = 'mediax-cli.exe' }
     default { throw "Unsupported Windows architecture: $architecture" }
 }
 
@@ -250,7 +249,21 @@ try {
         $binZip = Join-Path $TemporaryDir $Asset
         $binUrl = Get-AssetUrl $Asset
         Write-Output "Downloading $Asset …"
-        Invoke-WebRequest -Uri $binUrl -OutFile $binZip -UseBasicParsing -TimeoutSec 180 -MaximumRedirection 0
+        try {
+            Invoke-WebRequest -Uri $binUrl -OutFile $binZip -UseBasicParsing -TimeoutSec 180 -MaximumRedirection 0
+        }
+        catch {
+            if ($architecture.ToUpperInvariant() -eq 'ARM64') {
+                Write-Output 'Native ARM64 asset missing; falling back to mediax-windows-x64.zip …'
+                $Asset = 'mediax-windows-x64.zip'
+                $binZip = Join-Path $TemporaryDir $Asset
+                $binUrl = Get-AssetUrl $Asset
+                Invoke-WebRequest -Uri $binUrl -OutFile $binZip -UseBasicParsing -TimeoutSec 180 -MaximumRedirection 0
+            }
+            else {
+                throw "Missing Release asset $Asset. Publish a v* tag (CI builds binaries)."
+            }
+        }
 
         $clientDir = Join-Path $TemporaryDir 'client'
         Expand-Archive -LiteralPath $binZip -DestinationPath $clientDir -Force
