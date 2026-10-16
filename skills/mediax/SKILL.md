@@ -1,6 +1,6 @@
 ---
 name: mediax
-version: 0.0.11
+version: 0.4.0
 description: "通过 mediax-cli / mxc 操作本机 MediaX：自检、账号与身份查询、立即发布、定时排期、日历、改期，以及目标重试、恢复和核验。"
 metadata:
   category: "productivity"

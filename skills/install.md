@@ -2,7 +2,7 @@
 name: mediax-bootstrap
 description: "用于安装或升级 MediaX CLI、同步正式 Skill，并完成基础配置与环境自检。"
 metadata:
-  version: "0.0.11"
+  version: "0.4.0"
   category: productivity
 ---
 
@@ -71,7 +71,7 @@ curl -f --connect-timeout 10 --max-time 120 \
 bash install-mediax.sh --skills-dir '<skills-dir>'
 ```
 
-CLI 真文件装入 `$HOME/.mediax/agent/bin/mediax-cli`；默认在 `$HOME/.local/bin` 创建 `mediax-cli` / `mxc` 软链（`--bin-dir` 可改链接目录）。Skill 装入 `$HOME/.mediax/agent/skills/{mediax,mx}`，并软链到 `--skills-dir/{mediax,mx}` 与 `~/.agents/skills/{mediax,mx}`（Skill 短名仍为 `mx`）。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.0.11`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
+CLI 真文件装入 `$HOME/.mediax/agent/bin/mediax-cli`；默认在 `$HOME/.local/bin` 创建 `mediax-cli` / `mxc` 软链（`--bin-dir` 可改链接目录）。Skill 装入 `$HOME/.mediax/agent/skills/{mediax,mx}`，并软链到 `--skills-dir/{mediax,mx}` 与 `~/.agents/skills/{mediax,mx}`（Skill 短名仍为 `mx`）。仅同步 Skill 用 `--skill-only`。指定版本用 `--ref v0.4.0`。开发者从源码编译用 `--from-source`（此时才需要 Bun）。目录不在 PATH 中时按脚本提示处理，不自动改 shell 配置。
 
 **Windows（PowerShell）**
 
@@ -82,7 +82,7 @@ Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/ski
 & .\install-mediax.ps1 -SkillsDir '<skills-dir>' -AddToPath
 ```
 
-CLI 装入 `%USERPROFILE%\.mediax\agent\bin`（`mediax-cli.exe` + `mxc.cmd`）。`-AddToPath` 将该目录加入当前用户 PATH。Skill 真源在 `%USERPROFILE%\.mediax\agent\skills\{mediax,mx}`，并对 `-SkillsDir` 与 `%USERPROFILE%\.agents\skills` 建目录链接。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.0.11`。已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
+CLI 装入 `%USERPROFILE%\.mediax\agent\bin`（`mediax-cli.exe` + `mxc.cmd`）。`-AddToPath` 将该目录加入当前用户 PATH。Skill 真源在 `%USERPROFILE%\.mediax\agent\skills\{mediax,mx}`，并对 `-SkillsDir` 与 `%USERPROFILE%\.agents\skills` 建目录链接。仅同步 Skill 用 `-SkillOnly`。指定版本用 `-Ref v0.4.0`。已打开的终端或 Agent 需重启后生效。若执行策略阻止脚本，报告限制，不自动修改系统策略。
 
 Windows x64 使用 `mediax-windows-x64.zip`；Windows ARM64 优先 `mediax-windows-arm64.zip`（若某次 Release 缺该资产则回退 x64 仿真）。
 
