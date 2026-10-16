@@ -319,7 +319,7 @@ main() {
   printf '\nDone. Refresh the Agent skill list (or restart the Agent), then run: mediax-cli doctor\n'
   printf 'Root: %s\n' "$MEDIAX_ROOT"
   printf 'Agent home: %s (control.json under this tree)\n' "$MEDIAX_HOME"
-  printf 'Install doc: %s/install.md\n' "$RAW_BASE"
+  printf 'Install doc: %s/skills/install.md\n' "$RAW_BASE"
 }
 
 main "$@"

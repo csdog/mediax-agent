@@ -51,7 +51,7 @@ export async function runDoctor(): Promise<DoctorReport> {
 
   let probe: Awaited<ReturnType<typeof probeDesktop>> | null = null;
   if (resolved.config) {
-    probe = await probeDesktop(resolved.config);
+    probe = await probeDesktop();
     if (!probe.ok) {
       blockers.push(
         probe.error

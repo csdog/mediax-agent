@@ -28,7 +28,7 @@ EOF
 printf '%s\n' '{"baseUrl":"http://127.0.0.1:9","token":"t"}' >"$AGENT_HOME/control.json"
 CONTROL_HASH=$(cksum <"$AGENT_HOME/control.json")
 
-MEDIAX_INSTALL_SOURCE="$ROOT" bash "$ROOT/install.sh" --skills-dir "$HOME/.cursor/skills" --from-source --ref main
+MEDIAX_INSTALL_SOURCE="$ROOT" bash "$ROOT/skills/install.sh" --skills-dir "$HOME/.cursor/skills" --from-source --ref main
 
 test -x "$AGENT_HOME/bin/mediax-cli"
 test -f "$AGENT_HOME/skills/mediax/SKILL.md"

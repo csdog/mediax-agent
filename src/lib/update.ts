@@ -7,7 +7,7 @@ export const CHECK_INTERVAL_SECONDS = 24 * 60 * 60;
 export const DEFAULT_RELEASES_URL =
   "https://api.github.com/repos/csdog/mediax-agent/releases/latest";
 export const INSTALL_DOC_URL =
-  "https://raw.githubusercontent.com/csdog/mediax-agent/main/install.md";
+  "https://raw.githubusercontent.com/csdog/mediax-agent/main/skills/install.md";
 export const UPDATE_PROMPT = `请根据 ${INSTALL_DOC_URL}，安装 mediax`;
 
 type UpdateCache = {

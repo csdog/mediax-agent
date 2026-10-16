@@ -1,15 +1,6 @@
-/**
- * Hand-maintained fetcher for `@openapi-codegen` output (`desktopComponents.ts`).
- * Re-run `bun run generate:api` after changing `DesktopFetcherExtraProps`.
- */
+import { requireControlConfig } from "../config";
 
-export type DesktopFetcherExtraProps = {
-  /** Loopback base URL without trailing slash (from control.json / env). */
-  baseUrl: string;
-  /** Bearer token; never log the raw value. */
-  token: string;
-};
-
+/** Hand-maintained transport for the generated OpenAPI client. */
 export type ErrorWrapper<TError> =
   | TError
   | { status: "unknown"; payload: string }
@@ -23,7 +14,7 @@ export type DesktopFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = 
   queryParams?: TQueryParams;
   pathParams?: TPathParams;
   signal?: AbortSignal;
-} & DesktopFetcherExtraProps;
+};
 
 export async function desktopFetch<
   TData,
@@ -40,17 +31,19 @@ export async function desktopFetch<
   pathParams,
   queryParams,
   signal,
-  baseUrl,
-  token,
 }: DesktopFetcherOptions<TBody, THeaders, TQueryParams, TPathParams>): Promise<TData> {
-  const path = resolveUrl(url, queryParams as Record<string, unknown>, pathParams as Record<
-    string,
-    string
-  >);
+  // Resolve per request: the desktop rotates its port/token when restarted.
+  const { baseUrl, token } = requireControlConfig();
+  const path = resolveUrl(
+    url,
+    queryParams as Record<string, unknown>,
+    pathParams as Record<string, string>,
+  );
   const target = `${baseUrl.replace(/\/$/, "")}${path}`;
   const isForm = typeof FormData !== "undefined" && body instanceof FormData;
   const response = await fetch(target, {
     method: method.toUpperCase(),
+    redirect: "error",
     signal,
     headers: {
       Accept: "application/json",
@@ -97,7 +90,9 @@ function resolveUrl(
   pathParams: Record<string, string> = {},
 ): string {
   const query = toQueryString(queryParams);
-  const path = url.replace(/\{\w*\}/g, (key) => pathParams[key.slice(1, -1)] ?? "");
+  const path = url.replace(/\{\w*\}/g, (key) =>
+    encodeURIComponent(pathParams[key.slice(1, -1)] ?? ""),
+  );
   return query ? `${path}?${query}` : path;
 }
 

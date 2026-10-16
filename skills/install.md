@@ -13,7 +13,7 @@ metadata:
 ## 发给 Agent 的一句话
 
 ```
-请根据 https://raw.githubusercontent.com/csdog/mediax-agent/main/install.md，安装 mediax
+请根据 https://raw.githubusercontent.com/csdog/mediax-agent/main/skills/install.md，安装 mediax
 ```
 
 ## 核心原则
@@ -66,7 +66,7 @@ Agent / PATH 侧为**软链**（Windows Skill 优先 junction，失败则复制�
 
 ```bash
 curl -f --connect-timeout 10 --max-time 120 \
-  'https://raw.githubusercontent.com/csdog/mediax-agent/main/install.sh' \
+  'https://raw.githubusercontent.com/csdog/mediax-agent/main/skills/install.sh' \
   -o install-mediax.sh &&
 bash install-mediax.sh --skills-dir '<skills-dir>'
 ```
@@ -77,7 +77,7 @@ CLI 真文件装入 `$HOME/.mediax/agent/bin/mediax-cli`；默认在 `$HOME/.loc
 
 ```powershell
 $ErrorActionPreference = 'Stop'
-Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/install.ps1' `
+Invoke-WebRequest 'https://raw.githubusercontent.com/csdog/mediax-agent/main/skills/install.ps1' `
   -OutFile install-mediax.ps1 -UseBasicParsing -TimeoutSec 120 -MaximumRedirection 0
 & .\install-mediax.ps1 -SkillsDir '<skills-dir>' -AddToPath
 ```

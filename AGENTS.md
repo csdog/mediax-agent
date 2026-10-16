@@ -2,7 +2,7 @@
 
 MediaX 的 Agent 面仓库（GitHub：`csdog/mediax-agent`）。本目录即仓库根；本地可放在外层容器 `mediax/mediax-agent/`，与桌面仓 `mediax-desktop/`（`csdog/mediax`）并列、**独立 git**。
 
-给 Cursor / Claude 等用的 **CLI + Skill**（MCP 以后做薄封装）。业务发布/排期命令 **blocked by** 桌面排期与内容日历；当前以 `doctor` / `skill` 等业务无关能力为主。
+给 Cursor / Claude 等用的 **CLI + Skill**（MCP 以后做薄封装）。已接通桌面账号、发布、排期、日历与任务处理，客户端契约由桌面 OpenAPI 生成。
 
 ## 命令
 
@@ -33,10 +33,10 @@ bun run build
 
 ## 与桌面的边界
 
-| 侧 | 仓库 | 职责 |
-| --- | --- | --- |
-| 桌面 | `csdog/mediax` | Electron；规划中主进程 **Hono + OpenAPI/Swagger**，写 `control.json`，业务真源 |
-| 本仓 | `csdog/mediax-agent` | CLI / Skill /（后）MCP；只做客户端 |
+| 侧   | 仓库                 | 职责                                                             |
+| ---- | -------------------- | ---------------------------------------------------------------- |
+| 桌面 | `csdog/mediax`       | Electron；主进程 **Hono + OpenAPI**，写 `control.json`，业务真源 |
+| 本仓 | `csdog/mediax-agent` | CLI / Skill /（后）MCP；只做客户端                               |
 
 - 连接：`127.0.0.1` + 本地 token；**不要**云中转、不要监听非 loopback。
 - 配置优先级：`MEDIAX_CONTROL_URL` + `MEDIAX_CONTROL_TOKEN` > `MEDIAX_CONTROL_CONFIG` / `~/.mediax/agent/control.json`。
@@ -51,27 +51,17 @@ bun run build
 
 ## 版本与发版
 
-对用户可见的 CLI/Skill 行为有实质变化时，**同一批提交**抬 `package.json` 的 `version`（semver），并视需要同步 Skill frontmatter `version`。
+日常功能开发、修复、提交、推送和 PR 合并都不升版本号、不打 tag、不创建 Release。只有用户明确要求正式发版时，才统一更新 `package.json` / Skill 版本，默认经发版 PR 合并后，为同一提交打推送同号 `v*` 标签并验证 Release 和全部构建产物。不要为重试构建反复升版本号。
 
-**只要 `package.json` 的 `version` 相对上一已发布版本有增加，合并进 `main` 后必须立刻打并推送同号 `v*` 标签**（如 `0.0.11` → `v0.0.11`）。禁止出现「版本号已抬、tag 未打」；不要等用户再提醒发版。
-
-### 走 PR，再打 tag
-
-完整构建与发版步骤见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。GitHub Release 自动 **What's Changed** 只汇总合并进默认分支的 **PR**。
-
-1. 功能分支开发（含 version bump）。
-2. PR → merge 进 `main`。
-3. **同一轮操作内**在已合并的 `main` 上打并推送与 `package.json` 一致的 `v*` 标签，创建 [Release](https://github.com/csdog/mediax-agent/releases)。
-
-用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推。无论走 PR 还是直推，**version bump 后都必须打 tag**。
+完整构建与发版步骤见 [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)。未经用户明确要求，不提交、不推送、不正式发版。
 
 ## 约束
 
 - 输出：人类可读默认；机器用 `--json`（字段含 `ok` / `action` / `version` / `data`）。更新提醒只写 **stderr**，不要污染 stdout JSON。
 - 日志与 JSON **不要**打印完整 token。
 - 更新检查：`src/lib/update.ts`；缓存 `~/.mediax/agent/update.json`；默认源为 GitHub Releases；可用 `MEDIAX_NO_UPDATE_CHECK` / `MEDIAX_UPDATE_URL`。
-- 本机安装布局：`~/.mediax/agent/{bin,skills,backups,control.json}`；Agent/PATH 用软链，见 [install.md](install.md)。
+- 本机安装布局：`~/.mediax/agent/{bin,skills,backups,control.json}`；Agent/PATH 用软链，见 [install.md](skills/install.md)。
 - 不把本仓改成与 `csdog/mediax` 的 monorepo。
 - 不在本仓实现桌面主进程 HTTP；契约变更以桌面 OpenAPI 为准，本仓只跑 `generate:api` 消费生成客户端。
-- 改 `DesktopFetcherExtraProps` 后必须重跑 `generate:api`（并保留 `scripts/fix-generated-imports.mjs` 对 `verbatimModuleSyntax` 的修补）。
+- 连接配置由 `desktopFetcher.ts` 每次请求时通过 `config.ts` 解析；不要用 `FetcherExtraProps` 向生成客户端传 `baseUrl` / token，也不要增加生成后修补脚本。改契约后运行 `generate:api`。
 - MCP 若添加：必须调用与 CLI 相同的库/命令路径，禁止第二套协议语义。

@@ -39,7 +39,18 @@ function fromEnv(): ControlConfig | null {
   if (!baseUrl || !token) {
     throw new Error("MEDIAX_CONTROL_URL and MEDIAX_CONTROL_TOKEN must be set together");
   }
-  return { baseUrl: baseUrl.replace(/\/$/, ""), token, apiVersion: 1 };
+  const url = new URL(baseUrl);
+  if (
+    !["127.0.0.1", "localhost"].includes(url.hostname) ||
+    url.protocol !== "http:" ||
+    url.username ||
+    url.password ||
+    url.pathname !== "/" ||
+    url.search ||
+    url.hash
+  )
+    throw new Error("baseUrl must be an HTTP loopback origin (127.0.0.1 or localhost)");
+  return { baseUrl: url.origin, token, apiVersion: 1 };
 }
 
 function readFileConfig(path: string): { config: ControlConfig | null; parseError: string | null } {
@@ -53,7 +64,15 @@ function readFileConfig(path: string): { config: ControlConfig | null; parseErro
     let baseUrl = raw.baseUrl.trim().replace(/\/$/, "");
     try {
       const u = new URL(baseUrl);
-      if (u.hostname !== "127.0.0.1" && u.hostname !== "localhost")
+      if (
+        (u.hostname !== "127.0.0.1" && u.hostname !== "localhost") ||
+        u.protocol !== "http:" ||
+        u.username ||
+        u.password ||
+        u.pathname !== "/" ||
+        u.search ||
+        u.hash
+      )
         return { config: null, parseError: "baseUrl must be loopback (127.0.0.1 or localhost)" };
     } catch {
       return { config: null, parseError: "baseUrl is not a valid URL" };
@@ -119,4 +138,12 @@ export function resolveControlConfig(): ResolvedControl {
     filePresent: existsSync(configPath),
     parseError: file.parseError,
   };
+}
+
+/** The transport owns connection details; callers pass business parameters only. */
+export function requireControlConfig(): ControlConfig {
+  const resolved = resolveControlConfig();
+  if (!resolved.config)
+    throw new Error(resolved.parseError ?? "请启动 MediaX 桌面，等待控制面就绪。");
+  return resolved.config;
 }
