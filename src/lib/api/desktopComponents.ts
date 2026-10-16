@@ -5,20 +5,407 @@
  */
 import type * as Fetcher from "./desktopFetcher";
 import { desktopFetch } from "./desktopFetcher";
-import type { DesktopFetcherExtraProps } from "./desktopFetcher";
 import type * as Schemas from "./desktopSchemas";
 
 export type HealthGetError = Fetcher.ErrorWrapper<undefined>;
 
-export type HealthGetVariables = DesktopFetcherExtraProps;
-
-export const healthGet = (
-  variables: HealthGetVariables,
-  signal?: AbortSignal,
-) =>
+export const healthGet = (signal?: AbortSignal) =>
   desktopFetch<Schemas.HealthResponse, HealthGetError, undefined, {}, {}, {}>({
     url: "/health",
     method: "get",
-    ...variables,
     signal,
   });
+
+export type AccountsListError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type AccountsListResponse = Schemas.Account[];
+
+export const accountsList = (signal?: AbortSignal) =>
+  desktopFetch<AccountsListResponse, AccountsListError, undefined, {}, {}, {}>({
+    url: "/accounts",
+    method: "get",
+    signal,
+  });
+
+export type AccountRefreshPathParams = {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  id: string;
+};
+
+export type AccountRefreshError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type AccountRefreshVariables = {
+  pathParams: AccountRefreshPathParams;
+};
+
+export const accountRefresh = (
+  variables: AccountRefreshVariables,
+  signal?: AbortSignal,
+) =>
+  desktopFetch<
+    Schemas.Account,
+    AccountRefreshError,
+    undefined,
+    {},
+    {},
+    AccountRefreshPathParams
+  >({ url: "/accounts/{id}/refresh", method: "post", ...variables, signal });
+
+export type TasksListError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type TasksListResponse = {
+  tasks: Schemas.Task[];
+  targets: Schemas.TaskTarget[];
+};
+
+export const tasksList = (signal?: AbortSignal) =>
+  desktopFetch<TasksListResponse, TasksListError, undefined, {}, {}, {}>({
+    url: "/tasks",
+    method: "get",
+    signal,
+  });
+
+export type TaskCreateError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type TaskCreateVariables = {
+  body: Schemas.PublishInput;
+};
+
+export const taskCreate = (
+  variables: TaskCreateVariables,
+  signal?: AbortSignal,
+) =>
+  desktopFetch<
+    Schemas.TaskDetail,
+    TaskCreateError,
+    Schemas.PublishInput,
+    {},
+    {},
+    {}
+  >({ url: "/tasks", method: "post", ...variables, signal });
+
+export type TaskGetPathParams = {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  id: string;
+};
+
+export type TaskGetError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type TaskGetVariables = {
+  pathParams: TaskGetPathParams;
+};
+
+export const taskGet = (variables: TaskGetVariables, signal?: AbortSignal) =>
+  desktopFetch<
+    Schemas.TaskDetail,
+    TaskGetError,
+    undefined,
+    {},
+    {},
+    TaskGetPathParams
+  >({ url: "/tasks/{id}", method: "get", ...variables, signal });
+
+export type TaskReschedulePathParams = {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  id: string;
+};
+
+export type TaskRescheduleError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type TaskRescheduleRequestBody = {
+  /**
+   * @format date-time
+   */
+  scheduledAt: string;
+};
+
+export type TaskRescheduleVariables = {
+  body: TaskRescheduleRequestBody;
+  pathParams: TaskReschedulePathParams;
+};
+
+export const taskReschedule = (
+  variables: TaskRescheduleVariables,
+  signal?: AbortSignal,
+) =>
+  desktopFetch<
+    Schemas.TaskDetail,
+    TaskRescheduleError,
+    TaskRescheduleRequestBody,
+    {},
+    {},
+    TaskReschedulePathParams
+  >({ url: "/tasks/{id}/schedule", method: "patch", ...variables, signal });
+
+export type CalendarListQueryParams = {
+  /**
+   * @format date-time
+   */
+  from: string;
+  /**
+   * @format date-time
+   */
+  to: string;
+};
+
+export type CalendarListError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type CalendarListResponse = {
+  task: Schemas.Task;
+  targets: Schemas.TaskTarget[];
+  when: string;
+}[];
+
+export type CalendarListVariables = {
+  queryParams: CalendarListQueryParams;
+};
+
+export const calendarList = (
+  variables: CalendarListVariables,
+  signal?: AbortSignal,
+) =>
+  desktopFetch<
+    CalendarListResponse,
+    CalendarListError,
+    undefined,
+    {},
+    CalendarListQueryParams,
+    {}
+  >({ url: "/calendar", method: "get", ...variables, signal });
+
+export type TargetActionPathParams = {
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  id: string;
+  action: "retry" | "resume" | "verify";
+};
+
+export type TargetActionError = Fetcher.ErrorWrapper<
+  | {
+      status: 400;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 401;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 404;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 409;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 413;
+      payload: Schemas.ControlError;
+    }
+  | {
+      status: 503;
+      payload: Schemas.ControlError;
+    }
+>;
+
+export type TargetActionVariables = {
+  pathParams: TargetActionPathParams;
+};
+
+export const targetAction = (
+  variables: TargetActionVariables,
+  signal?: AbortSignal,
+) =>
+  desktopFetch<
+    Schemas.TaskDetail,
+    TargetActionError,
+    undefined,
+    {},
+    {},
+    TargetActionPathParams
+  >({ url: "/targets/{id}/{action}", method: "post", ...variables, signal });

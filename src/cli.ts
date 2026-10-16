@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 import { defineCommand, runMain } from "citty";
 import { formatDoctorHuman, runDoctor } from "./commands/doctor";
+import { accountsCommand, publishCommand, tasksCommand, calendarCommand } from "./commands/control";
 import { skillCommand } from "./commands/skill";
 import { printJson, printLines } from "./lib/print";
 import { notifyUpdateAvailable } from "./lib/update";
@@ -32,10 +33,14 @@ const main = defineCommand({
   meta: {
     name: "mediax-cli",
     version: cliVersion(),
-    description: "MediaX Agent CLI — local desktop control (publish/schedule later)",
+    description: "MediaX Agent CLI — local desktop publishing and scheduling",
   },
   subCommands: {
     doctor,
+    accounts: accountsCommand,
+    publish: publishCommand,
+    tasks: tasksCommand,
+    calendar: calendarCommand,
     skill: skillCommand,
   },
 });

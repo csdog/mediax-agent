@@ -2,22 +2,22 @@
   "name": "mediax-agent",
   "version": "0.0.11",
   "private": false,
-  "license": "AGPL-3.0-only",
-  "type": "module",
   "description": "MediaX Agent CLI (Skill / MCP later): talk to local MediaX desktop",
+  "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
     "url": "https://github.com/csdog/mediax-agent.git"
   },
   "bin": {
-    "mediax-cli": "./bin/mediax-cli",
-    "mxc": "./bin/mxc"
+    "mediax-cli": "./skills/bin/mediax-cli",
+    "mxc": "./skills/bin/mxc"
   },
+  "type": "module",
   "scripts": {
     "mediax-cli": "bun run src/cli.ts",
     "mxc": "bun run src/cli.ts",
     "doctor": "bun run src/cli.ts doctor",
-    "generate:api": "node --require ./scripts/preload-ts48.cjs ./node_modules/@openapi-codegen/cli/lib/cli.js gen desktop && node ./scripts/fix-generated-imports.mjs",
+    "generate:api": "node ./node_modules/@openapi-codegen/cli/lib/cli.js gen desktop",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
     "build": "bun build ./src/cli.ts --compile --outfile dist/mediax-cli && cp dist/mediax-cli dist/mxc && rm -rf dist/skills && cp -R skills dist/skills"

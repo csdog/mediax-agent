@@ -313,7 +313,7 @@ try {
     Write-Output 'Done. Refresh the Agent skill list (or restart the Agent), then run: mediax-cli doctor'
     Write-Output "Root: $MediaxRoot"
     Write-Output "Agent home: $MediaxHome (control.json under this tree)"
-    Write-Output "Install doc: $RawBase/install.md"
+    Write-Output "Install doc: $RawBase/skills/install.md"
 }
 finally {
     if (Test-Path -LiteralPath $TemporaryDir) {

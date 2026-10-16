@@ -1,4 +1,4 @@
-import type { ControlConfig } from "./config";
+import { requireControlConfig } from "./config";
 import { healthGet } from "./api/desktopComponents";
 
 export type DesktopProbe = {
@@ -11,16 +11,13 @@ export type DesktopProbe = {
 };
 
 /** Probe desktop control health via generated OpenAPI client. Offline / missing API → not ok. */
-export async function probeDesktop(config: ControlConfig, timeoutMs = 1500): Promise<DesktopProbe> {
-  const url = `${config.baseUrl}/health`;
+export async function probeDesktop(timeoutMs = 1500): Promise<DesktopProbe> {
+  const url = `${requireControlConfig().baseUrl}/health`;
   const started = performance.now();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const body = await healthGet(
-      { baseUrl: config.baseUrl, token: config.token },
-      controller.signal,
-    );
+    const body = await healthGet(controller.signal);
     return {
       ok: body.ok === true,
       url,

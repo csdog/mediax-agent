@@ -37,7 +37,9 @@ bun run build    # → dist/mediax-cli、dist/mxc，并复制 skills/ → dist/s
 
 GitHub Release 的自动 **What's Changed** 只汇总合并进默认分支的 **PR**。
 
-1. 功能分支开发（含需要的 `package.json` / Skill `version` bump）。
+日常开发不升版本、不打 tag、不发布 Release；仅在用户明确要求正式发版时执行：
+
+1. 汇总本次发版变更，在发版分支统一更新 `package.json` / Skill 版本。
 2. 开 PR → Review → **merge 进 `main`**。
 3. 在已合并的 `main` 上打并推送与 version 一致的 `v*` 标签（如 `v0.0.2`），创建 [GitHub Release](https://github.com/csdog/mediax-agent/releases)。
 
@@ -46,14 +48,14 @@ git tag v0.0.2
 git push origin v0.0.2
 ```
 
-打 `v*` 标签后，[`.github/workflows/release.yml`](../.github/workflows/release.yml)（`oven-sh/setup-bun` 使用 **Bun latest**）会交叉编译 macOS / Linux / Windows（含 `windows-arm64`）二进制与 `mediax-skills.zip` 并挂到 GitHub Release。终端用户用 `install.sh` / `install.ps1` 下载到 `~/.mediax/agent`，**不需要 Bun**；本机开发仍用 `bun run build`。
+打 `v*` 标签后，[`.github/workflows/release.yml`](../.github/workflows/release.yml)（`oven-sh/setup-bun` 使用 **Bun latest**）会交叉编译 macOS / Linux / Windows（含 `windows-arm64`）二进制与 `mediax-skills.zip` 并挂到 GitHub Release。终端用户用 `skills/install.sh` / `skills/install.ps1` 下载到 `~/.mediax/agent`，**不需要 Bun**；本机开发仍用 `bun run build`。
 
-用户要求「提交并推送」且属发版范围时：默认走 PR 再打 tag；明确「直推 / 不要 PR」时才直推（并自行写清 release 正文或接受无 What's Changed）。
+仅「提交并推送」不视为正式发版。正式发版默认走 PR 再打 tag；用户明确「直推 / 不要 PR」时才直推，并写清 Release 正文。
 
 ## OpenAPI 客户端
 
 - 配置：[`openapi-codegen.config.ts`](../openapi-codegen.config.ts)（`generateSchemaTypes` + `generateFetchers`，prefix `desktop`）
-- 手写：`src/lib/api/desktopFetcher.ts`（`baseUrl` + bearer `token`）
+- 手写：`src/lib/api/desktopFetcher.ts`（每次请求从 `config.ts` 读取本机 `baseUrl` 与 bearer token；调用方只传业务参数）
 - 生成：`desktopSchemas.ts` / `desktopComponents.ts`（勿手改；改契约后重跑 generate）
 - 默认契约：fixture [`openapi/control.openapi.json`](../openapi/control.openapi.json)
 - 从运行中的桌面拉规约（Hono 通常挂 `/doc`）：
@@ -62,7 +64,7 @@ git push origin v0.0.2
   MEDIAX_OPENAPI_URL=http://127.0.0.1:<port>/doc bun run generate:api
   ```
 
-- codegen 内部经 `scripts/preload-ts48.cjs` 使用嵌套 TypeScript 4.8；项目本身可继续用 TypeScript 7。改完生成结果后由 `scripts/fix-generated-imports.mjs` 适配 `verbatimModuleSyntax`。
+- 直接使用 codegen CLI 自身的依赖运行生成；项目使用 TypeScript 7。Fetcher 不声明额外连接参数类型，生成结果无需修补，保持 `verbatimModuleSyntax` 开启。
 
 ## Skill
 
@@ -74,11 +76,11 @@ mediax-cli skill sync
 
 ## 技术栈
 
-| 层 | 选型 |
-| --- | --- |
-| CLI | TypeScript + Bun compile → 单文件 `mediax-cli` / `mxc` |
-| 命令 | citty |
-| API 客户端 | `@openapi-codegen/typescript`（对齐 angryecho-web） |
+| 层         | 选型                                                                                      |
+| ---------- | ----------------------------------------------------------------------------------------- |
+| CLI        | TypeScript + Bun compile → 单文件 `mediax-cli` / `mxc`                                    |
+| 命令       | citty                                                                                     |
+| API 客户端 | `@openapi-codegen/typescript`（对齐 angryecho-web）                                       |
 | 桌面控制面 | [`csdog/mediax`](https://github.com/csdog/mediax) 主进程 Hono + OpenAPI；loopback + token |
 
 Electron 不能用 Bun 作主进程运行时；Bun 仅用于本 CLI。

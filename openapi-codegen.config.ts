@@ -4,7 +4,7 @@ import { defineConfig } from "@openapi-codegen/cli";
 /**
  * Generate typed client from MediaX desktop OpenAPI.
  *
- * Default: checked-in fixture `openapi/control.openapi.json` (desktop API not shipped yet).
+ * Default: checked-in desktop contract snapshot `openapi/control.openapi.json`.
  * Live desktop (Hono typically serves JSON at `/doc`):
  *   MEDIAX_OPENAPI_URL=http://127.0.0.1:<port>/doc bun run generate:api
  */

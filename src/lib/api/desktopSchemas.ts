@@ -3,7 +3,196 @@
  *
  * @version 0.0.1
  */
+export enum AccountPlatform {
+  Douyin = "douyin",
+  Kuaishou = "kuaishou",
+  Channels = "channels",
+  Xiaohongshu = "xiaohongshu",
+  Bilibili = "bilibili",
+  Baijiahao = "baijiahao",
+  Toutiao = "toutiao",
+  Weibo = "weibo",
+  Zhihu = "zhihu",
+  Qq = "qq",
+  Sohu = "sohu",
+  Yidian = "yidian",
+  Dayu = "dayu",
+  Netease = "netease",
+  Iqiyi = "iqiyi",
+  Weishi = "weishi",
+  Wechat = "wechat",
+  Sohuvideo = "sohuvideo",
+  Pipixia = "pipixia",
+  Tencentvideo = "tencentvideo",
+  Duoduo = "duoduo",
+  Meipai = "meipai",
+  Acfun = "acfun",
+  Kuaichuan = "kuaichuan",
+  Xueqiu = "xueqiu",
+  Fengwang = "fengwang",
+  Dewu = "dewu",
+  Jd = "jd",
+  Douban = "douban",
+  Csdn = "csdn",
+  Jianshu = "jianshu",
+  Chejia = "chejia",
+  Xhsmerchant = "xhsmerchant",
+  Yiche = "yiche",
+  Dongche = "dongche",
+  Ximalaya = "ximalaya",
+  Xiaoyuzhou = "xiaoyuzhou",
+  Guanghe = "guanghe",
+  Xhsdm = "xhsdm",
+  Tiktok = "tiktok",
+  Youtube = "youtube",
+  Facebook = "facebook",
+  Instagram = "instagram",
+  Reddit = "reddit",
+  Threads = "threads",
+  Twitter = "twitter",
+  Linkedin = "linkedin",
+  Pinterest = "pinterest",
+  Alipay = "alipay",
+  Hupu = "hupu",
+  Zsxq = "zsxq",
+  Music163 = "music163",
+  Qqmusic = "qqmusic",
+  Qingting = "qingting",
+  Lizhi = "lizhi",
+  Googlebusiness = "googlebusiness",
+}
+
+export enum AccountLogin {
+  Unchecked = "unchecked",
+  LoggedOut = "logged_out",
+  LoggedIn = "logged_in",
+  NeedsVerification = "needs_verification",
+}
+
+export enum TargetKind {
+  Profile = "profile",
+  Page = "page",
+}
+
+export enum TaskContentKind {
+  Article = "article",
+  Moment = "moment",
+  Video = "video",
+  Audio = "audio",
+}
+
+export enum TargetStatus {
+  Scheduled = "scheduled",
+  Pending = "pending",
+  Running = "running",
+  AwaitingUser = "awaiting_user",
+  Submitted = "submitted",
+  Verified = "verified",
+  Failed = "failed",
+  Unknown = "unknown",
+}
+
+export enum PublishInputKind {
+  Article = "article",
+  Moment = "moment",
+  Video = "video",
+  Audio = "audio",
+}
+
 export type HealthResponse = {
+  /**
+   * @example true
+   */
   ok: boolean;
+  /**
+   * @example 0.2.0
+   */
   version?: string | null;
+};
+
+export type Account = {
+  id: string;
+  name: string;
+  platform: AccountPlatform;
+  login: AccountLogin;
+  targets: PublishTarget[];
+  message?: string;
+  avatar?: string;
+  supportedKinds: ("article" | "moment" | "video" | "audio")[];
+};
+
+export type PublishTarget = {
+  /**
+   * @minLength 1
+   */
+  accountId: string;
+  /**
+   * @pattern ^\d+$
+   */
+  identityId: string;
+  name: string;
+  kind: TargetKind;
+};
+
+export type ControlError = {
+  error: {
+    code: string;
+    message: string;
+  };
+};
+
+export type Task = {
+  id: string;
+  contentKind: TaskContentKind;
+  title: string | null;
+  body: string;
+  images: string[];
+  createdAt: string;
+  scheduledAt?: string | null;
+};
+
+export type TaskTarget = PublishTarget & {
+  id: string;
+  taskId: string;
+  status: TargetStatus;
+  error: string | null;
+  url: string | null;
+};
+
+export type TaskDetail = {
+  task: Task;
+  targets: TaskTarget[];
+};
+
+export type PublishInput = {
+  kind: PublishInputKind;
+  title?: string | null;
+  /**
+   * @maxLength 500000
+   * @default
+   */
+  body?: string;
+  /**
+   * @maxItems 30
+   */
+  paths?: string[];
+  /**
+   * @minItems 1
+   * @maxItems 100
+   */
+  targets: {
+    /**
+     * @minLength 1
+     */
+    accountId: string;
+    /**
+     * @pattern ^\d+$
+     */
+    identityId: string;
+    kind: TargetKind;
+  }[];
+  /**
+   * @format date-time
+   */
+  scheduledAt?: string | null;
 };
